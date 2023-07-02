@@ -8,13 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/MainMenu.unity
     guid: 30e02d30c2933b742b4c782bb78cf76f
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Simulador.unity
     guid: c850ee8c3b14cc8459e7e186857cf567
   - enabled: 0
     path: Assets/_Scenes/QR.unity
     guid: 17b82c0c3c9fe23449dcd8d07992b61f
-  - enabled: 0
+  - enabled: 1
     path: Assets/_Scenes/VideoScene.unity
     guid: b9e406e18d4de104cb643a377be997d4
   m_configObjects:
