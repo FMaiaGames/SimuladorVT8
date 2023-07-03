@@ -153,8 +153,8 @@ static const int32_t s_InvokerIndices[30] =
 	5087,
 	6505,
 	6506,
-	8876,
-	8876,
+	8885,
+	8885,
 	6337,
 	6194,
 	5178,
@@ -167,8 +167,8 @@ static const int32_t s_InvokerIndices[30] =
 	5178,
 	5178,
 	5127,
-	7801,
-	7801,
+	7807,
+	7807,
 	4166,
 };
 extern const Il2CppDebuggerMetadataRegistration g_DebuggerMetadataRegistrationUnityEngine_ParticleSystemModule;
