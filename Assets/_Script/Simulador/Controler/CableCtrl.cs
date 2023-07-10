@@ -5,95 +5,93 @@ using static UnityEngine.XR.OpenXR.Features.Interactions.HTCViveControllerProfil
 
 public class CableCtrl : MonoBehaviour
 {
-    [SerializeField] private InputCtrl inputCtrl;
-    [SerializeField] private WireController wireController;
+    [Header("---Logic---")]
+    [SerializeField] private InputCtrl _inputCtrl;
+    [SerializeField] private GameObject _currentObj;
+
+    [Header("---Prefabs---")]
+    [SerializeField] private GameObject _plugPrefab;
+    [SerializeField] private GameObject _wirePointPrefab;
+
+    [Header("---Ports---")]
+    [SerializeField] private GameObject _firstPort;
+    [SerializeField] private GameObject _secondPort;
+
+    [Header("---Plugs---")]
+    [SerializeField] public GameObject FirstPlug;
+    [SerializeField] private GameObject _secondPlug;
 
 
-    [SerializeField] private GameObject currentObj;
-    [SerializeField] private GameObject Plug;
-    [SerializeField] private GameObject pointInWire;
-
-    [SerializeField] private GameObject FirstPort;
-    [SerializeField] private GameObject SecondPort;
-
-    public  GameObject  FirstPlug { get; private set; }
-    [SerializeField] private GameObject SecondPlug;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        //Assign the inputCtrl.currentObject into a local variable to save processing
-        currentObj = inputCtrl.currentObject;
+        //Assign the _inputCtrl._currentObject into a local variable to save processing
+        _currentObj = _inputCtrl.currentObject;
 
-        if (inputCtrl.isPressed && currentObj != null) 
+        if (_inputCtrl.isPressed == true) 
         {
-            if (currentObj.CompareTag("ports") && FirstPort == null)
+            if (_currentObj != null && _currentObj.CompareTag("ports") && _firstPort == null)
             {
-                FirstPort = currentObj;
-                FirstPlug = Instantiate(Plug, FirstPort.transform.position, Quaternion.identity);
+                _firstPort = _currentObj;
+                FirstPlug = Instantiate(_plugPrefab, _firstPort.transform.position, Quaternion.identity);
                 FirstPlug.transform.rotation = Quaternion.Euler(70.0f, 0.0f, 0.0f);
-                FirstPlug.GetComponent<MeshRenderer>().material = FirstPort.GetComponent<MeshRenderer>().material;
+                FirstPlug.GetComponent<MeshRenderer>().material = _firstPort.GetComponent<MeshRenderer>().material;
             }
         }
         else
         {
-            if (currentObj && currentObj != FirstPort && FirstPort != null && FirstPlug != null)
+            //if (_currentObj != null && _currentObj != _firstPort && _firstPort != null && FirstPlug != null && _inputCtrl.isDraging == true)
+            if (_currentObj != null && _firstPort != null && _currentObj.CompareTag("ports") )
             {
-                SecondPort = currentObj;
-                SecondPlug = Instantiate(Plug, SecondPort.transform.position, Quaternion.identity);
-                SecondPlug.transform.rotation = Quaternion.Euler(70.0f, 0.0f, 0.0f);
-                SecondPlug.GetComponent<MeshRenderer>().material = FirstPort.GetComponent<MeshRenderer>().material;
+                _secondPort = _currentObj;
+                _secondPlug = Instantiate(_plugPrefab, _secondPort.transform.position, Quaternion.identity);
+                _secondPlug.transform.rotation = Quaternion.Euler(70.0f, 0.0f, 0.0f);
+                _secondPlug.GetComponent<MeshRenderer>().material = _firstPort.GetComponent<MeshRenderer>().material;
 
-                if (FirstPort.GetComponent<PortObj>()?.portClasses == SecondPort.GetComponent<PortObj>()?.portClasses)
+                if (_firstPort.GetComponent<PortObj>()?.portClasses == _secondPort.GetComponent<PortObj>()?.portClasses)
                 {
-                    CreateWire(FirstPort, SecondPort, 50.0f, FirstPlug, SecondPlug);
+                    CreateWire(_firstPort, _secondPort, 50.0f, FirstPlug, _secondPlug);
                 }
                 else
                 {
                     Destroy(FirstPlug);
-                    Destroy(SecondPlug);
+                    Destroy(_secondPlug);
                 }
 
-                FirstPort = null;
-                SecondPort = null;
+                _firstPort = null;
+                _secondPort = null;
                 FirstPlug = null;
-                SecondPlug = null;
+                _secondPlug = null;
             }
             else
             {
-                FirstPort = null;
-                SecondPort = null;
+                _firstPort = null;
+                _secondPort = null;
 
                 if (FirstPlug != null && FirstPlug.activeSelf == true)
                     Destroy(FirstPlug);
 
-                if (SecondPlug != null && SecondPlug.activeSelf == true)
-                    Destroy(SecondPlug);
+                if (_secondPlug != null && _secondPlug.activeSelf == true)
+                    Destroy(_secondPlug);
 
                 FirstPlug = null;
-                SecondPlug = null;
+                _secondPlug = null;
 
             }
         }
+
     }
 
 
-    public void CreateWire(GameObject FirstPort, GameObject SecondPort, float duration, GameObject FirstPlug, GameObject SecondPlug)
+    public void CreateWire(GameObject _firstPort, GameObject _secondPort, float duration, GameObject FirstPlug, GameObject _secondPlug)
     {
 
         //Finds the midpoint from the two positions and theradius 
-        Vector3 midPoint = Vector3.Lerp(FirstPort.transform.position, SecondPort.transform.position, 0.5f);
-        float radius = Vector3.Distance(FirstPort.transform.position, SecondPort.transform.position) / 2; //Finds the radius of the circle
+        Vector3 midPoint = Vector3.Lerp(_firstPort.transform.position, _secondPort.transform.position, 0.5f);
+        float radius = Vector3.Distance(_firstPort.transform.position, _secondPort.transform.position) / 2; //Finds the radius of the circle
 
         //Instantiates the centerSpawner to calculate all the positions from
-        GameObject CentralSpawner = Instantiate(pointInWire, midPoint, Quaternion.identity);
-        CentralSpawner.transform.LookAt(SecondPort.transform.position);
+        GameObject CentralSpawner = Instantiate(_wirePointPrefab, midPoint, Quaternion.identity);
+        CentralSpawner.transform.LookAt(_secondPort.transform.position);
         CentralSpawner.name = "eixo";
         CentralSpawner.tag = "Wire";
 
@@ -115,34 +113,34 @@ public class CableCtrl : MonoBehaviour
         {
             spawnPos.transform.RotateAround(CentralSpawner.transform.position, Vector3.up, 1);
 
-            GameObject wirePoint = Instantiate(pointInWire, spawnPos.transform.position, Quaternion.identity);
+            GameObject wirePoint = Instantiate(_wirePointPrefab, spawnPos.transform.position, Quaternion.identity);
             wirePoint.name = "ponto";
             wirePoint.transform.parent = completewire.transform;
             wirePoint.transform.localPosition = new Vector3(wirePoint.transform.localPosition.x, 0, wirePoint.transform.localPosition.z);
 
-            wirePoint.GetComponent<MeshRenderer>().material = FirstPort.GetComponent<MeshRenderer>().material;
+            wirePoint.GetComponent<MeshRenderer>().material = _firstPort.GetComponent<MeshRenderer>().material;
         }
 
         //rotate the wire to match the CentralSpawner
         completewire.transform.position = CentralSpawner.transform.position;
         completewire.transform.rotation = CentralSpawner.transform.rotation;
-        Vector3 relativePos = completewire.transform.position - SecondPort.transform.position;
+        Vector3 relativePos = completewire.transform.position - _secondPort.transform.position;
         completewire.transform.rotation = Quaternion.LookRotation(relativePos, Vector3.right);
 
-        //Add the plugs
+        //Add the _plugPrefabs
         FirstPlug.transform.parent = completewire.transform;
-        SecondPlug.transform.parent = completewire.transform;
+        _secondPlug.transform.parent = completewire.transform;
 
         //Add the properties to each wire
         completewire.AddComponent<WireOBj>();
-        completewire.GetComponent<WireOBj>().FirstPort = FirstPort;
-        completewire.GetComponent<WireOBj>().SecondPort = SecondPort;
+        completewire.GetComponent<WireOBj>().FirstPort = _firstPort;
+        completewire.GetComponent<WireOBj>().SecondPort = _secondPort;
         completewire.tag = "Wire";
 
-        if(FirstPort.GetComponent<PortObj>() == true && SecondPort.GetComponent<PortObj>() == true)
+        if(_firstPort.GetComponent<PortObj>() == true && _secondPort.GetComponent<PortObj>() == true)
         {
-            FirstPort.GetComponent<PortObj>().connectedTo.Add(completewire);
-            SecondPort.GetComponent<PortObj>().connectedTo.Add(completewire);
+            _firstPort.GetComponent<PortObj>().connectedTo.Add(completewire);
+            _secondPort.GetComponent<PortObj>().connectedTo.Add(completewire);
         }
 
         //Delete uneeded obj

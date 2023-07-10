@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement;
 public class TexturesFromWeb : MonoBehaviour
 {
 
-    public string urlStr;
+    [SerializeField] private string urlStr;
     private string completeUrl;
 
     [SerializeField] private GameObject content;
@@ -90,11 +90,6 @@ public class TexturesFromWeb : MonoBehaviour
     {
         if(content.transform.localScale.x >= 2 )
             content.transform.localScale -= Vector3.one;
-    }
-
-    public void Exit()
-    {
-        SceneManager.LoadScene(0);
     }
 
 

@@ -13,7 +13,7 @@ public class LogicalCtrl : MonoBehaviour
     [SerializeField] private DisjuntorCtrl _disjuntorCtrl;
     [SerializeField] private ChaveGeralCtrl _chaveGeralCtrl;
     [SerializeField] public LigDesligCtrl _ligDesligCtrl;
-    [SerializeField] public UIWiningControler _uIWiningControler;
+    [SerializeField] public WinLogic _winLogic;
 
     [Header("--- Btn Desligado --- ")]
     [SerializeField] private GameObject _btnDesligado;
@@ -53,7 +53,7 @@ public class LogicalCtrl : MonoBehaviour
                 if(_ligDesligCtrl.isOn)
                 {
                     Activate(_Ligado, _vermelhoLigado);
-                    _uIWiningControler.powerOn = true;
+                    _winLogic.powerOn = true;
                 }
                 else
                 {

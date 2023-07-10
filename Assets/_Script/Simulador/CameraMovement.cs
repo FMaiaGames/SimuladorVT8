@@ -29,10 +29,14 @@ public class CameraMovement : MonoBehaviour
     {
         //Check if the player is using a mouse or touch
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+        {
             if(_cableCtrl.FirstPlug == null) 
                 TouchCamera();
+        }
         else
+        {
             MouseCamera();
+        }
     }
 
     void MouseCamera()
@@ -112,14 +116,7 @@ public class CameraMovement : MonoBehaviour
             cam.fieldOfView = newFOV;
         }
 
-
-
     }
-
-
-
-
-
 
 
 

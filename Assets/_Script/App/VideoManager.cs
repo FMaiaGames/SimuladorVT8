@@ -13,7 +13,7 @@ public class VideoManager : MonoBehaviour
     public Slider slider;
     public float progress;
 
-    [Header("Buttons")]
+    [Header("--- Buttons ---")]
     public GameObject btnPlay;
     public GameObject btnPause;
 

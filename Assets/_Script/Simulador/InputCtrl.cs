@@ -7,14 +7,12 @@ public class InputCtrl : MonoBehaviour
 {
     public static InputCtrl Instance;
 
-    RaycastHit[]  allHits = new RaycastHit[100];
-    public  bool wireHit;
-
-
+    [Header("---Objects---")]
+    public bool wireHit;
     public GameObject currentObject;
+    RaycastHit[]  allHits = new RaycastHit[100];
 
-    public List<GameObject> currentObjects = new List<GameObject>();
-
+    [Header("---Mouse Buttons---")]
     public bool click = false;
     public bool isButtonReleased = false;
 
@@ -24,6 +22,7 @@ public class InputCtrl : MonoBehaviour
     public bool doubleClick = false;
     float doubleClickTime = 0f;
 
+    [Header("---Positions---")]
     public Vector3 pressedPos = Vector3.zero;
     public Vector3 releasePos = Vector3.zero;
     public Vector3 currentPos = Vector3.zero;
@@ -119,9 +118,7 @@ public class InputCtrl : MonoBehaviour
     void DetecObjects()
     {
         //Cleans the previous objects
-
         currentObject = null;
-        currentObjects = null;
 
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {

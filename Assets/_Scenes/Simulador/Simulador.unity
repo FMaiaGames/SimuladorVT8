@@ -1650,8 +1650,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 894566510}
-        m_TargetAssemblyTypeName: UIWiningControler, Assembly-CSharp
+      - m_Target: {fileID: 894566512}
+        m_TargetAssemblyTypeName: WinLogic, Assembly-CSharp
         m_MethodName: WinConditions
         m_Mode: 1
         m_Arguments:
@@ -2879,11 +2879,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 894566506}
+  - component: {fileID: 894566513}
   - component: {fileID: 894566511}
   - component: {fileID: 894566507}
   - component: {fileID: 894566509}
   - component: {fileID: 894566508}
-  - component: {fileID: 894566510}
+  - component: {fileID: 894566512}
   m_Layer: 0
   m_Name: SimulationManager
   m_TagString: Untagged
@@ -2920,7 +2921,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wireHit: 0
   currentObject: {fileID: 0}
-  currentObjects: []
   click: 0
   isButtonReleased: 0
   isPressed: 0
@@ -2957,35 +2957,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579153004c9c410498d2ab181337e4ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputCtrl: {fileID: 894566507}
-  wireController: {fileID: 0}
-  currentObj: {fileID: 0}
-  Plug: {fileID: 3497478369322738255, guid: 086a966cf77d2bd44bc150e213dc4470, type: 3}
-  pointInWire: {fileID: 6738289932558863957, guid: 95fd70288764d4642a8fffc23e1997f2,
+  _inputCtrl: {fileID: 894566507}
+  _currentObj: {fileID: 0}
+  _plugPrefab: {fileID: 3497478369322738255, guid: 086a966cf77d2bd44bc150e213dc4470,
     type: 3}
-  FirstPort: {fileID: 0}
-  SecondPort: {fileID: 0}
-  SecondPlug: {fileID: 0}
---- !u!114 &894566510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 894566505}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c7e4b97ad4cbd2418166ff7647e0ecc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wires: []
-  conditions: 0
-  winingDisplay: {fileID: 1744506708}
-  losingDisplay: {fileID: 1761794825}
-  _ligDesligCtrl: {fileID: 7072523145908822476}
-  powerOn: 0
-  _disjuntorCtrl: {fileID: 0}
-  wereWiresAddedFirst: 0
+  _wirePointPrefab: {fileID: 6738289932558863957, guid: 95fd70288764d4642a8fffc23e1997f2,
+    type: 3}
+  _firstPort: {fileID: 0}
+  _secondPort: {fileID: 0}
+  FirstPlug: {fileID: 0}
+  _secondPlug: {fileID: 0}
 --- !u!114 &894566511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3001,7 +2982,7 @@ MonoBehaviour:
   _disjuntorCtrl: {fileID: 9097259671232384636}
   _chaveGeralCtrl: {fileID: 8514668957066986560}
   _ligDesligCtrl: {fileID: 7072523145908822476}
-  _uIWiningControler: {fileID: 894566510}
+  _winLogic: {fileID: 894566512}
   _btnDesligado: {fileID: 6572682729535785762}
   _verdeLigado: {fileID: 2100000, guid: 49c4582d135125c408175238705fbec0, type: 2}
   _verdeDesligado: {fileID: 2100000, guid: 870ac4e2ed9826948b1da5a77bbc6b60, type: 2}
@@ -3012,6 +2993,36 @@ MonoBehaviour:
   _vermelhoLigado: {fileID: 2100000, guid: 887767a32bf8cb841892cb45db08593e, type: 2}
   _vermelhorDesligado: {fileID: 2100000, guid: 1ca3ebad5045b0a4881b9118a67f2238, type: 2}
   _LigDeslig: {fileID: 7072523145908822475}
+--- !u!114 &894566512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894566505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c7e4b97ad4cbd2418166ff7647e0ecc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _winingDisplay: {fileID: 1744506708}
+  _losingDisplay: {fileID: 1761794825}
+  _ligDesligCtrl: {fileID: 7072523145908822476}
+  powerOn: 0
+  _disjuntorCtrl: {fileID: 9097259671232384636}
+  were_wiresAddedFirst: 0
+--- !u!114 &894566513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894566505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21eac364b3af9a40bbb636bcd001339, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &927242721
 GameObject:
   m_ObjectHideFlags: 0
@@ -3257,9 +3268,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIWiningControler, Assembly-CSharp
-        m_MethodName: restart
+      - m_Target: {fileID: 894566513}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: Simulation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4821,7 +4832,7 @@ GameObject:
   - component: {fileID: 1829708400}
   - component: {fileID: 1829708399}
   m_Layer: 5
-  m_Name: SairBtn
+  m_Name: ExitBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4892,9 +4903,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIWiningControler, Assembly-CSharp
-        m_MethodName: Exit
+      - m_Target: {fileID: 894566513}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: MainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
