@@ -94,24 +94,5 @@ public class AndroidCodeReaderSample : MonoBehaviour {
         }
     }
 
-    private void OnGUI() {
-        // show decoded text on screen
-        //GUI.TextField(new Rect(10, 10, 256, 25), lastResult);
-    }
-    /*
-    void Update()
-    {
-        if (lastResult != null && lastResult.Length > 3)
-        {
-            popUp.SetActive(true);
-            componente.text = lastResult;
-        }
-    }
-
-    public void LoadSimulation()
-    {
-        SceneManager.LoadScene("Simulador");
-    }
-    */
 
 }

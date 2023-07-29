@@ -17,6 +17,8 @@ public class CameraMovement : MonoBehaviour
     private Vector3 newPosition;
     private Camera cam;
 
+    [SerializeField] private GameObject _clpScreen;
+
     void Start()
     {
         screenWidth = Screen.width;
@@ -30,12 +32,13 @@ public class CameraMovement : MonoBehaviour
         //Check if the player is using a mouse or touch
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            if(_cableCtrl.FirstPlug == null) 
+            if(_cableCtrl.FirstPlug == null && _clpScreen.activeInHierarchy == false) 
                 TouchCamera();
         }
         else
         {
-            MouseCamera();
+            if(_clpScreen.activeInHierarchy == false)
+                MouseCamera();
         }
     }
 

@@ -85,14 +85,14 @@ public class CableCtrl : MonoBehaviour
     public void CreateWire(GameObject _firstPort, GameObject _secondPort, float duration, GameObject FirstPlug, GameObject _secondPlug)
     {
 
-        //Finds the midpoint from the two positions and theradius 
+        //Finds the midpoint from the two positions and the radius 
         Vector3 midPoint = Vector3.Lerp(_firstPort.transform.position, _secondPort.transform.position, 0.5f);
         float radius = Vector3.Distance(_firstPort.transform.position, _secondPort.transform.position) / 2; //Finds the radius of the circle
 
         //Instantiates the centerSpawner to calculate all the positions from
         GameObject CentralSpawner = Instantiate(_wirePointPrefab, midPoint, Quaternion.identity);
         CentralSpawner.transform.LookAt(_secondPort.transform.position);
-        CentralSpawner.name = "eixo";
+        CentralSpawner.name = "Axis";
         CentralSpawner.tag = "Wire";
 
         //Creates the wire parent object to store all the prefabs and form the wire
@@ -103,7 +103,7 @@ public class CableCtrl : MonoBehaviour
 
         //Creates a temporary position to rotate around the CentralSpawner to spawn the points
         GameObject spawnPos = new GameObject();
-        spawnPos.name = "spanwpos";
+        spawnPos.name = "spanwPos";
         spawnPos.tag = "Wire";
         spawnPos.transform.position = CentralSpawner.transform.position;
         spawnPos.transform.rotation = CentralSpawner.transform.rotation;
@@ -114,11 +114,11 @@ public class CableCtrl : MonoBehaviour
             spawnPos.transform.RotateAround(CentralSpawner.transform.position, Vector3.up, 1);
 
             GameObject wirePoint = Instantiate(_wirePointPrefab, spawnPos.transform.position, Quaternion.identity);
-            wirePoint.name = "ponto";
+            wirePoint.name = "Point";
             wirePoint.transform.parent = completewire.transform;
             wirePoint.transform.localPosition = new Vector3(wirePoint.transform.localPosition.x, 0, wirePoint.transform.localPosition.z);
 
-            wirePoint.GetComponent<MeshRenderer>().material = _firstPort.GetComponent<MeshRenderer>().material;
+            wirePoint.GetComponent<MeshRenderer>().material = _firstPort.GetComponent<MeshRenderer>().material ;
         }
 
         //rotate the wire to match the CentralSpawner
@@ -143,7 +143,7 @@ public class CableCtrl : MonoBehaviour
             _secondPort.GetComponent<PortObj>().connectedTo.Add(completewire);
         }
 
-        //Delete uneeded obj
+        //Delete unneeded objects
         Destroy(CentralSpawner);
         Destroy(spawnPos);
 

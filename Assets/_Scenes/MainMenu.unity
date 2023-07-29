@@ -1531,7 +1531,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1df06a4e2d28ca04b8db8911d6807ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: www.google.com
   _Windows:
   - {fileID: 1841020140}
   - {fileID: 433619622}
@@ -2480,9 +2479,9 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 900, y: 1600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -5237,9 +5236,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenSimScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: Simulation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16196,11 +16195,12 @@ MonoBehaviour:
     de seu posicionamento, permitindo o controle preciso da velocidade, acelera\xE7\xE3o
     e da posi\xE7\xE3o angular. Pode ser de corrente cont\xEDnua ou de corrente alternada.\r\n\r\nPossui
     este nome porque n\xE3o tem rota\xE7\xE3o livre e de forma cont\xEDnua como um
-    motor convencional. Ele obedece a um comento estabelecido, ou seja, \u201Cserve
-    a u procedimento determinado\r\n\r\n\xC9 muito utilizado em sistemas de coordenadas
-    e bra\xE7os rob\xF3ticos, drones automa\xE7\xE3o ind\xFAstria, m\xE1quinas diversas,
-    aeromodelos de helic\xF3pteros e avi\xF5es, nos ramo aeroespacial, agr\xEDcola,
-    defesa, m\xE9dica e em muitas outras aplica\xE7\xF5es\r\n"
+    motor convencional. Ele obedece a um comento estabelecido, ou seja, serve a um
+    procedimento determinado\r\n\r\nEntre as principais aplica\xE7\xF5es de um Servo
+    Motor, podemos destacar sua implementa\xE7\xE3o \xE0s \xE1reas de aeromodelismo,
+    automodelismo, nautimodelismo, rob\xF3tica em geral, automa\xE7\xE3o de processos,
+    controle de v\xE1lvulas, qualquer outra aplica\xE7\xE3o em que seja preciso controlar
+    posi\xE7\xE3o ou movimento com precis\xE3o.\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7ecba5ef09e14c643b5fde16c29f206f, type: 2}
   m_sharedMaterial: {fileID: -410432689088591074, guid: 7ecba5ef09e14c643b5fde16c29f206f,
@@ -16228,7 +16228,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 37.4
+  m_fontSize: 36.15
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

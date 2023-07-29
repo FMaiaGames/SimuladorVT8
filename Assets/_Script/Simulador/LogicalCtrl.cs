@@ -33,12 +33,6 @@ public class LogicalCtrl : MonoBehaviour
     [Header("--- LigDeslig --- ")]
     [SerializeField] private GameObject _LigDeslig;
 
-    
-
-    private void Start()
-    {
-
-    }
 
     private void Update()
     {
@@ -71,16 +65,16 @@ public class LogicalCtrl : MonoBehaviour
             
         }
 
-        void Activate( GameObject obj, Material mat)
-        {
-            obj.GetComponent<Renderer>().material = mat;
-        }
 
-        void DeActivate(GameObject obj, Material mat)
-        {
-            Activate(obj, mat);
-        }
+    }
+    void Activate( GameObject obj, Material mat)
+    {
+        obj.GetComponent<Renderer>().material = mat;
+    }
 
+    void DeActivate(GameObject obj, Material mat)
+    {
+        Activate(obj, mat);
     }
 
 

@@ -18,7 +18,6 @@ public class LigDesligCtrl : MonoBehaviour
     void Update()
     {
 
-
         //Check is the previous logic point is active first
         if (_chaveGeralCtrl.isOn)
         {

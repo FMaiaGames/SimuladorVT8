@@ -16,6 +16,7 @@ public class WinLogic : MonoBehaviour
 
     [SerializeField] private DisjuntorCtrl _disjuntorCtrl;
     public bool were_wiresAddedFirst = false;
+    [SerializeField] private ParameterObj _parameterObj;
 
     public void WinConditions()
     {
@@ -26,6 +27,7 @@ public class WinLogic : MonoBehaviour
 
         if(_wires != null && _wires.Length >= 1 && powerOn == true)
         {
+            // CHECK WIRES CONNECTIONS
             foreach(GameObject wire in _wires)
             {
                 if(wire != null && wire.GetComponent<WireOBj>() != null)
@@ -51,6 +53,15 @@ public class WinLogic : MonoBehaviour
                         _conditions++;
                 }
             }
+
+            // CHECK PARAMETERS
+            int winningParams = _parameterObj.CheckWinningParams();
+
+            if(winningParams == 15)
+                _conditions++;
+            else
+                _conditions = 0;
+
         }
         else
         {
@@ -61,7 +72,7 @@ public class WinLogic : MonoBehaviour
 
         if (_ligDesligCtrl.isOn == true)
         {
-            if (_conditions == 6 && _wires.Length == 6) 
+            if (_conditions == 7 && _wires.Length == 6) 
             {
                 _winingDisplay.SetActive(true);
                 _losingDisplay.SetActive(false);
@@ -81,7 +92,7 @@ public class WinLogic : MonoBehaviour
 
     }
 
-    public void restart()
+    public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

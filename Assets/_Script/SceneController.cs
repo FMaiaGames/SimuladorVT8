@@ -15,4 +15,5 @@ public class SceneController : MonoBehaviour
 
     public void Simulation(){SceneManager.LoadScene("Simulador");}
 
+    public void OnCollisionExit(Collision collision){Application.Quit();}
 }
