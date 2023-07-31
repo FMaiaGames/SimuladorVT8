@@ -8,23 +8,29 @@ public class CameraMovement : MonoBehaviour
 {
     [SerializeField] private CableCtrl _cableCtrl;
 
-    public float scrollSpeed;
-    public float scrollBorderThickness;
+    [SerializeField] private float _scrollSpeed;
+    [SerializeField] private float _scrollBorderThickness;
 
-    private float screenWidth;
-    private float screenHeight;
+    private float _screenWidth;
+    private float _screenHeight;
 
-    private Vector3 newPosition;
-    private Camera cam;
+    [SerializeField] private float _xMin;
+    [SerializeField] private float _xMax;
+
+    [SerializeField] private float _yMin;
+    [SerializeField] private float _yMax;
+
+    private Vector3 _newPosition;
+    private Camera _cam;
 
     [SerializeField] private GameObject _clpScreen;
 
     void Start()
     {
-        screenWidth = Screen.width;
-        screenHeight = Screen.height;
+        _screenWidth = Screen.width;
+        _screenHeight = Screen.height;
 
-        cam = Camera.main;
+        _cam = Camera.main;
     }
 
     void Update()
@@ -33,16 +39,16 @@ public class CameraMovement : MonoBehaviour
         if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
             if(_cableCtrl.FirstPlug == null && _clpScreen.activeInHierarchy == false) 
-                TouchCamera();
+                Touch_camera();
         }
         else
         {
             if(_clpScreen.activeInHierarchy == false)
-                MouseCamera();
+                Mouse_camera();
         }
     }
 
-    void MouseCamera()
+    void Mouse_camera()
     {
         // Get the current mouse position
         Vector3 mousePosition = Input.mousePosition;
@@ -51,37 +57,37 @@ public class CameraMovement : MonoBehaviour
         float horizontalScroll = 0f;
         float verticalScroll = 0f;
 
-        if (mousePosition.x < scrollBorderThickness)
+        if (mousePosition.x < _scrollBorderThickness)
         {
             horizontalScroll = 1f;
         }
-        else if (mousePosition.x > screenWidth - scrollBorderThickness)
+        else if (mousePosition.x > _screenWidth - _scrollBorderThickness)
         {
             horizontalScroll = -1f;
         }
 
-        if (mousePosition.y < scrollBorderThickness)
+        if (mousePosition.y < _scrollBorderThickness)
         {
             verticalScroll = -1f;
         }
-        else if (mousePosition.y > screenHeight - scrollBorderThickness)
+        else if (mousePosition.y > _screenHeight - _scrollBorderThickness)
         {
             verticalScroll = 1f;
         }
 
-        Vector3 scrollVector = new Vector3(horizontalScroll, verticalScroll, 0f) * scrollSpeed * Time.deltaTime;
+        Vector3 scrollVector = new Vector3(horizontalScroll, verticalScroll, 0f) * _scrollSpeed * Time.deltaTime;
 
-        cam.transform.position += scrollVector;
+        _cam.transform.position += scrollVector;
 
-        float clampedX = Mathf.Clamp(cam.transform.position.x, 2.4f, 3.8f);
-        float clampedy = Mathf.Clamp(cam.transform.position.y, 0.2f, 0.5f);
+        float clampedX = Mathf.Clamp(_cam.transform.position.x, _xMin, _xMax);
+        float clampedy = Mathf.Clamp(_cam.transform.position.y, _yMin, _yMax);
 
-        cam.transform.position = new Vector3(clampedX, clampedy, cam.transform.position.z);
+        _cam.transform.position = new Vector3(clampedX, clampedy, _cam.transform.position.z);
 
-        float newFOV = cam.fieldOfView -= Input.GetAxis("Mouse ScrollWheel") * 5;
+        float newFOV = _cam.fieldOfView -= Input.GetAxis("Mouse ScrollWheel") * 5;
     }
 
-    void TouchCamera()
+    void Touch_camera()
     {
         if (Input.touchCount == 1)
         {
@@ -89,13 +95,13 @@ public class CameraMovement : MonoBehaviour
 
             if (touch.phase == TouchPhase.Moved)
             {
-                newPosition = Vector3.zero;
-                newPosition = cam.transform.position - new Vector3(touch.deltaPosition.x * -0.0005f, touch.deltaPosition.y * 0.0005f, 0f);
+                _newPosition = Vector3.zero;
+                _newPosition = _cam.transform.position - new Vector3(touch.deltaPosition.x * -0.0005f, touch.deltaPosition.y * 0.0005f, 0f);
 
-                float clampedX = Mathf.Clamp(newPosition.x, 2.4f, 3.8f);
-                float clampedy = Mathf.Clamp(newPosition.y, 0.2f, 0.5f);
+                float clampedX = Mathf.Clamp(_newPosition.x, 2.0f, 4.2f);
+                float clampedy = Mathf.Clamp(_newPosition.y, 0.1f, 0.4f);
 
-                cam.transform.position = new Vector3(clampedX, clampedy, cam.transform.position.z);
+                _cam.transform.position = new Vector3(clampedX, clampedy, _cam.transform.position.z);
             }
         }
 
@@ -113,10 +119,10 @@ public class CameraMovement : MonoBehaviour
             float zoomMagnitude = prevMagnitude - currentMagnitude;
             float zoomAmount = zoomMagnitude * 0.05f;
 
-            float newFOV = cam.fieldOfView + zoomAmount;
+            float newFOV = _cam.fieldOfView + zoomAmount;
             newFOV = Mathf.Clamp(newFOV, 40f, 100f);
 
-            cam.fieldOfView = newFOV;
+            _cam.fieldOfView = newFOV;
         }
 
     }

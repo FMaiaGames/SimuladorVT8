@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using static ParameterObj;
+using static SimulationManager;
 
 public class ClpCtrl : MonoBehaviour
 {
@@ -15,6 +13,7 @@ public class ClpCtrl : MonoBehaviour
     private ParameterObj _parameterObj;
 
     [SerializeField] private GameObject _clpScreen;
+    private GameState _gameState;
 
     [Header("--- Display ---")]
     [SerializeField] private int[] _decimals; //EACH CHARACTER VALUE FROM THE DISPLAY
@@ -27,6 +26,19 @@ public class ClpCtrl : MonoBehaviour
     [SerializeField] private int[] _param; // THE VALUE OF EACH PARAM
     [SerializeField] private bool _isParOpen = false;
 
+    // Game State subscription 
+    private void Awake() { SimulationManager.OnStateChanged += OnStateChanged; }
+
+    private void OnDestroy() { SimulationManager.OnStateChanged -= OnStateChanged; }
+
+    public void OnStateChanged(GameState state)
+    {
+        if (state == GameState.WirePlacement)
+            _gameState = state;
+        else
+            _gameState = state;
+
+    }
     void Start()
     {
         _inputCtrl = InputCtrl.Instance;
@@ -42,8 +54,11 @@ public class ClpCtrl : MonoBehaviour
 
     void Update()
     {
-        if (_inputCtrl.click && _inputCtrl.currentObject == this.gameObject)
-            _clpScreen.SetActive(true);
+        if(_gameState == GameState.ParameterPhase)
+        {
+            if (_inputCtrl.click && _inputCtrl.currentObject == this.gameObject)
+                _clpScreen.SetActive(true);
+        }
 
         _displayChar[0].text = _decimals[0].ToString();
         _displayChar[1].text = _decimals[1].ToString();

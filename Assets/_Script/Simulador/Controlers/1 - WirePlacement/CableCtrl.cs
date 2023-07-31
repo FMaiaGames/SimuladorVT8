@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static SimulationManager;
 using static UnityEngine.XR.OpenXR.Features.Interactions.HTCViveControllerProfile;
 
 public class CableCtrl : MonoBehaviour
@@ -21,63 +22,75 @@ public class CableCtrl : MonoBehaviour
     [SerializeField] public GameObject FirstPlug;
     [SerializeField] private GameObject _secondPlug;
 
+    // Game State subscription 
+    private GameState _gameState;
+    private void Awake(){SimulationManager.OnStateChanged += OnStateChanged; }
+    private void OnDestroy(){SimulationManager.OnStateChanged -= OnStateChanged; }
+    public void OnStateChanged(GameState state){_gameState = state;}
 
     void Update()
     {
-        //Assign the _inputCtrl._currentObject into a local variable to save processing
-        _currentObj = _inputCtrl.currentObject;
-
-        if (_inputCtrl.isPressed == true) 
+        //First check if it is the correct phase to set wires
+        if(_gameState == GameState.WirePlacement)
         {
-            if (_currentObj != null && _currentObj.CompareTag("ports") && _firstPort == null)
-            {
-                _firstPort = _currentObj;
-                FirstPlug = Instantiate(_plugPrefab, _firstPort.transform.position, Quaternion.identity);
-                FirstPlug.transform.rotation = Quaternion.Euler(70.0f, 0.0f, 0.0f);
-                FirstPlug.GetComponent<MeshRenderer>().material = _firstPort.GetComponent<MeshRenderer>().material;
-            }
-        }
-        else
-        {
-            //if (_currentObj != null && _currentObj != _firstPort && _firstPort != null && FirstPlug != null && _inputCtrl.isDraging == true)
-            if (_currentObj != null && _firstPort != null && _currentObj.CompareTag("ports") )
-            {
-                _secondPort = _currentObj;
-                _secondPlug = Instantiate(_plugPrefab, _secondPort.transform.position, Quaternion.identity);
-                _secondPlug.transform.rotation = Quaternion.Euler(70.0f, 0.0f, 0.0f);
-                _secondPlug.GetComponent<MeshRenderer>().material = _firstPort.GetComponent<MeshRenderer>().material;
+            //Assign the _inputCtrl.currentObject into a local variable to save processing
+            _currentObj = _inputCtrl.currentObject;
 
-                if (_firstPort.GetComponent<PortObj>()?.portClasses == _secondPort.GetComponent<PortObj>()?.portClasses)
+            if (_inputCtrl.isPressed == true) 
+            {
+                if (_currentObj != null && _currentObj.CompareTag("ports") && _firstPort == null)
                 {
-                    CreateWire(_firstPort, _secondPort, 50.0f, FirstPlug, _secondPlug);
+                    _firstPort = _currentObj;
+                    FirstPlug = Instantiate(_plugPrefab, _firstPort.transform.position, Quaternion.identity);
+                    FirstPlug.transform.rotation = Quaternion.Euler(70.0f, 0.0f, 0.0f);
+                    FirstPlug.GetComponent<MeshRenderer>().material = _firstPort.GetComponent<MeshRenderer>().material;
                 }
-                else
-                {
-                    Destroy(FirstPlug);
-                    Destroy(_secondPlug);
-                }
-
-                _firstPort = null;
-                _secondPort = null;
-                FirstPlug = null;
-                _secondPlug = null;
             }
             else
             {
-                _firstPort = null;
-                _secondPort = null;
+                //if (_currentObj != null && _currentObj != _firstPort && _firstPort != null && FirstPlug != null && _inputCtrl.isDraging == true)
+                if (_currentObj != null && _firstPort != null && _currentObj.CompareTag("ports") )
+                {
+                    _secondPort = _currentObj;
+                    _secondPlug = Instantiate(_plugPrefab, _secondPort.transform.position, Quaternion.identity);
+                    _secondPlug.transform.rotation = Quaternion.Euler(70.0f, 0.0f, 0.0f);
+                    _secondPlug.GetComponent<MeshRenderer>().material = _firstPort.GetComponent<MeshRenderer>().material;
 
-                if (FirstPlug != null && FirstPlug.activeSelf == true)
-                    Destroy(FirstPlug);
+                    if (_firstPort.GetComponent<PortObj>()?.portClasses == _secondPort.GetComponent<PortObj>()?.portClasses)
+                    {
+                        CreateWire(_firstPort, _secondPort, 50.0f, FirstPlug, _secondPlug);
+                    }
+                    else
+                    {
+                        Destroy(FirstPlug);
+                        Destroy(_secondPlug);
+                    }
 
-                if (_secondPlug != null && _secondPlug.activeSelf == true)
-                    Destroy(_secondPlug);
+                    _firstPort = null;
+                    _secondPort = null;
+                    FirstPlug = null;
+                    _secondPlug = null;
+                }
+                else
+                {
+                    _firstPort = null;
+                    _secondPort = null;
 
-                FirstPlug = null;
-                _secondPlug = null;
+                    if (FirstPlug != null && FirstPlug.activeSelf == true)
+                        Destroy(FirstPlug);
 
+                    if (_secondPlug != null && _secondPlug.activeSelf == true)
+                        Destroy(_secondPlug);
+
+                    FirstPlug = null;
+                    _secondPlug = null;
+
+                }
             }
+
+
         }
+
 
     }
 

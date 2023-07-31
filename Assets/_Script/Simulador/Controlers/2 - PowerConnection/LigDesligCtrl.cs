@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using static SimulationManager;
 
 public class LigDesligCtrl : MonoBehaviour
 {
@@ -10,36 +11,38 @@ public class LigDesligCtrl : MonoBehaviour
 
     [SerializeField] private ChaveGeralCtrl _chaveGeralCtrl;
 
+    private bool _powerConnection;
+
     void Awake()
     {
         _inputCtrl = InputCtrl.Instance;
+        SimulationManager.OnStateChanged += OnStateChanged;
     }
+    // Game State subscription 
+    private GameState _gameState;
+    private void OnDestroy() { SimulationManager.OnStateChanged -= OnStateChanged; }
+    public void OnStateChanged(GameState state) { _gameState = state; }
 
     void Update()
     {
-
-        //Check is the previous logic point is active first
-        if (_chaveGeralCtrl.isOn)
+        if(_gameState == GameState.PowerConnection)
         {
-            if (_inputCtrl.click && _inputCtrl.currentObject == this.gameObject)
+            //Check is the previous logic point is active first
+            if (_chaveGeralCtrl.isOn)
             {
-                if (isOn == false)
+                if (_inputCtrl.click && _inputCtrl.currentObject == this.gameObject)
                 {
-                    isOn = true;
-                    StartCoroutine(press(8.6e-05f));
-                }
-                else
-                {
-                    isOn = false;
-                    StartCoroutine(press(8.6e-05f));
+                    if (isOn == false)
+                        StartCoroutine(press(8.6e-05f));
+                    else
+                        StartCoroutine(press(8.6e-05f));
                 }
             }
+            else
+            {
+                isOn = false;
+            }
         }
-        else
-        {
-            isOn = false;
-        }
-
     }
 
     public IEnumerator press(float pressDepth)
@@ -51,7 +54,13 @@ public class LigDesligCtrl : MonoBehaviour
             trans.Translate(0, 0 + 240.0e-06f, 0, Space.Self);
             yield return null;
         }
-            StartCoroutine(release(trans));
+
+        if (isOn == false)
+            isOn = true;
+        else
+            isOn = false;
+
+        StartCoroutine(release(trans));
     }
 
     public IEnumerator release(Transform trans)

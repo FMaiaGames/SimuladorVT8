@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    public static SceneController Instance;
+
+    public void Awake(){ Instance = this; }
+
     public void MainMenu(){SceneManager.LoadScene("MainMenu");}
 
     public void PDF(){SceneManager.LoadScene("PDF");}

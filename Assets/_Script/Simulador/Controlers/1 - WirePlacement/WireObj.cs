@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static SimulationManager;
 
 public class WireOBj : MonoBehaviour
 {
@@ -11,22 +12,32 @@ public class WireOBj : MonoBehaviour
 
     public float Clock;
 
+
     private void Awake()
     {
         FirstPort = null;
         SecondPort = null;
         Clock = 0.0f;
+        SimulationManager.OnStateChanged += OnStateChanged;
     }
+
+    // Game State subscription 
+    private GameState _gameState;
+    private void OnDestroy() { SimulationManager.OnStateChanged -= OnStateChanged; }
+    public void OnStateChanged(GameState state) { _gameState = state; }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(_gameState == GameState.WirePlacement)
         {
-            if (Time.time - Clock <= 0.3f)
+            if (Input.GetMouseButtonDown(0))
             {
-                DestroyOnTouch();
+                if (Time.time - Clock <= 0.3f)
+                {
+                    DestroyOnTouch();
+                }
+                Clock = Time.time;
             }
-            Clock = Time.time;
         }
 
     }
