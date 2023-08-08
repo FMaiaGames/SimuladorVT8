@@ -5,7 +5,13 @@ using UnityEngine;
 public class SimulationManager : MonoBehaviour
 {
     public static SimulationManager Instance;
-
+    public enum GameState
+    {
+        WirePlacement,
+        PowerConnection,
+        ParameterPhase,
+        EndGame
+    }
     public GameState State;
 
     public static event Action<GameState> OnStateChanged;
@@ -45,30 +51,11 @@ public class SimulationManager : MonoBehaviour
 
     public void IncrementState()
     {
-        switch (State)
-        {
-            case GameState.WirePlacement:
-                State = GameState.PowerConnection;
-                break;
-            case GameState.PowerConnection:
-                State = GameState.ParameterPhase;
-                break;
-            case GameState.ParameterPhase:
-                State = GameState.EndGame;
-                break;
-        }
+        State = GameState.PowerConnection;
 
         UpdateGameState(State);
-        print(State.ToString());
     }
 
-    public enum GameState
-    {
-        WirePlacement,
-        PowerConnection,
-        ParameterPhase,
-        EndGame
-    }
 
 
 }

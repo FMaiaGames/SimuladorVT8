@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 126322380}
   - component: {fileID: 126322379}
   - component: {fileID: 126322381}
+  - component: {fileID: 126322382}
   m_Layer: 0
   m_Name: Scene Manager
   m_TagString: Untagged
@@ -227,6 +228,18 @@ MonoBehaviour:
   androidCodeReaderSample: {fileID: 126322379}
   popUp: {fileID: 281489558}
   componente: {fileID: 339548890}
+--- !u!114 &126322382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 126322376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21eac364b3af9a40bbb636bcd001339, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &182739190
 GameObject:
   m_ObjectHideFlags: 0
@@ -2122,9 +2135,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenMainMenu
+      - m_Target: {fileID: 126322382}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: MainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

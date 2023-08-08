@@ -8,17 +8,16 @@ public class DRCtrl : MonoBehaviour
     private InputCtrl _inputCtrl;
 
     [SerializeField] private GameObject _lever;
+    public bool isOn = false;
 
+    [Header("--- Positions --- ")]
     private Vector3 originalPos;
     private Quaternion originalRot;
-
     private Vector3 newPos;
     private Quaternion newRot;
 
-    public bool isOn = false;
 
-    private bool _powerConnection;
-
+    
     // Game State subscription 
     private GameState _gameState;
     private void Awake() { SimulationManager.OnStateChanged += OnStateChanged; }
@@ -31,13 +30,14 @@ public class DRCtrl : MonoBehaviour
     {
         _inputCtrl = InputCtrl.Instance;
 
+        // Set the original position and rotation
         _lever.transform.GetPositionAndRotation(out originalPos, out originalRot);
 
+        //Set the new position on rotation of the on position 
         newPos = new Vector3(0.000495f, -0.000166f, 1.4e-05f); 
         newRot = Quaternion.Euler(new Vector3(0f, 0f, -180f) ); 
     }
 
- 
     void Update()
     {
         if(_gameState == GameState.PowerConnection)
@@ -55,6 +55,10 @@ public class DRCtrl : MonoBehaviour
                     _lever.transform.SetPositionAndRotation(originalPos, originalRot);
                 }
             }
+
+            if(isOn == false)
+                _lever.transform.SetPositionAndRotation(originalPos, originalRot);
+
         }
     }
 }

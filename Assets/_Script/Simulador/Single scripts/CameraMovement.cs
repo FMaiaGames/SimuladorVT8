@@ -8,17 +8,23 @@ public class CameraMovement : MonoBehaviour
 {
     [SerializeField] private CableCtrl _cableCtrl;
 
-    [SerializeField] private float _scrollSpeed;
-    [SerializeField] private float _scrollBorderThickness;
-
     private float _screenWidth;
     private float _screenHeight;
 
+    [Header("--- Positions Min & Max ---")]
     [SerializeField] private float _xMin;
     [SerializeField] private float _xMax;
 
     [SerializeField] private float _yMin;
     [SerializeField] private float _yMax;
+
+    [Header("--- Zoom ---")]
+    [SerializeField] private float _zoomMin;
+    [SerializeField] private float _zoomMax;
+
+    [Header("--- Misc ---")]
+    [SerializeField] private float _scrollSpeed;
+    [SerializeField] private float _scrollBorderThickness;
 
     private Vector3 _newPosition;
     private Camera _cam;
@@ -120,7 +126,7 @@ public class CameraMovement : MonoBehaviour
             float zoomAmount = zoomMagnitude * 0.05f;
 
             float newFOV = _cam.fieldOfView + zoomAmount;
-            newFOV = Mathf.Clamp(newFOV, 40f, 100f);
+            newFOV = Mathf.Clamp(newFOV, _zoomMin, _zoomMax);
 
             _cam.fieldOfView = newFOV;
         }

@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using static SimulationManager;
+using System.Collections;
 
 public class WinLogic : MonoBehaviour
 {
@@ -16,10 +18,10 @@ public class WinLogic : MonoBehaviour
     [SerializeField] private GameObject _winingDisplay;
     [SerializeField] private GameObject _losingDisplay;
 
-    [Header("--- Dispositivos --- ")]
+    [Header("--- Devices --- ")]
     [SerializeField] private LigDesligCtrl _ligDesligCtrl;
-    public bool powerOn = false;
     [SerializeField] private DisjuntorCtrl _disjuntorCtrl;
+    [SerializeField] private DRCtrl _dRCtrl;
     [SerializeField] private ParameterObj _parameterObj;
 
     [Header("--- WinLogic --- ")]
@@ -33,8 +35,7 @@ public class WinLogic : MonoBehaviour
 
     private void Awake(){ SimulationManager.OnStateChanged += OnStateChanged; }
     private void OnDestroy() { SimulationManager.OnStateChanged -= OnStateChanged; }
-    public void OnStateChanged(GameState state) { _gameState = state; }
-
+    private void OnStateChanged(GameState state) { _gameState = state; }
 
     public void WinConditions()
     {
@@ -55,7 +56,7 @@ public class WinLogic : MonoBehaviour
 
     }
 
-    void WireResult()
+    private void WireResult()
     {
         _conditions = 0;
         _wires = null;
@@ -70,22 +71,22 @@ public class WinLogic : MonoBehaviour
                 {
                     var wObjt = wire.GetComponent<WireOBj>();
 
-                    if (wObjt.FirstPort.name == "L1" && wObjt.SecondPort.name == "L1")
+                    if (wObjt.GetFirstPort().name == "L1" && wObjt.GetSecondPort().name == "L1")
                         _conditions++;
 
-                    if (wObjt.FirstPort.name == "L2" && wObjt.SecondPort.name == "L2")
+                    if (wObjt.GetFirstPort().name == "L2" && wObjt.GetSecondPort().name == "L2")
                         _conditions++;
 
-                    if (wObjt.FirstPort.name == "PE" && wObjt.SecondPort.name == "PE")
+                    if (wObjt.GetFirstPort().name == "PE" && wObjt.GetSecondPort().name == "PE")
                         _conditions++;
 
-                    if ((wObjt.FirstPort.name == "24vcc" && wObjt.SecondPort.name == "24v") || (wObjt.FirstPort.name == "24v" && wObjt.SecondPort.name == "24vcc"))
+                    if ((wObjt.GetFirstPort().name == "24vcc" && wObjt.GetSecondPort().name == "24v") || (wObjt.GetFirstPort().name == "24v" && wObjt.GetSecondPort().name == "24vcc"))
                         _conditions++;
 
-                    if ((wObjt.FirstPort.name == "10vcc" && wObjt.SecondPort.name == "10v") || (wObjt.FirstPort.name == "10v" && wObjt.SecondPort.name == "10vcc"))
+                    if ((wObjt.GetFirstPort().name == "10vcc" && wObjt.GetSecondPort().name == "10v") || (wObjt.GetFirstPort().name == "10v" && wObjt.GetSecondPort().name == "10vcc"))
                         _conditions++;
 
-                    if ((wObjt.FirstPort.name == "0vcc" && wObjt.SecondPort.name == "0v") || (wObjt.FirstPort.name == "0v" && wObjt.SecondPort.name == "0vcc"))
+                    if ((wObjt.GetFirstPort().name == "0vcc" && wObjt.GetSecondPort().name == "0v") || (wObjt.GetFirstPort().name == "0v" && wObjt.GetSecondPort().name == "0vcc"))
                         _conditions++;
                 }
             }
@@ -105,7 +106,7 @@ public class WinLogic : MonoBehaviour
         }
     }
 
-    void PowerResult()
+    private void PowerResult()
     {
         //Check is the main power node is powered and ready
         if (_ligDesligCtrl.isOn == true)
@@ -117,32 +118,51 @@ public class WinLogic : MonoBehaviour
             LoseDisplay();
     }
 
-    void ParameterResult()
+    private void ParameterResult()
     {
-        //Retrieve the 15 parameters needed for winning state
-        int winningParams = _parameterObj.CheckWinningParams();
-
-        if (winningParams == 15)
-            ShowMotorScreen();
+        if (_parameterObj.CheckWinningParams() == true)
+            FinalWin();
         else
             LoseDisplay();
     }
 
-    async void WinDisplay()
+    private async void WinDisplay()
     {
         _winingDisplay.SetActive(true);
         await Task.Delay(2000);
         _winingDisplay.SetActive(false);
     }
 
-    async void LoseDisplay()
+    private async void LoseDisplay()
     {
         _losingDisplay.SetActive(true);
         await Task.Delay(2000);
-        SceneController.Instance.Simulation();
+
+        //SceneController.Instance.Simulation();
+
+        switch (_gameState)
+        {
+            case GameState.WirePlacement:
+                SceneController.Instance.Simulation();
+                _losingDisplay.SetActive(false);
+                break;
+            case GameState.PowerConnection:
+                _dRCtrl.isOn = false;
+                _losingDisplay.SetActive(false);
+                break;
+            case GameState.ParameterPhase:
+                _parameterObj.DeleteParameters();
+                _losingDisplay.SetActive(false);
+                break;
+            case GameState.EndGame:
+                _losingDisplay.SetActive(false);
+                break;
+        }
     }
 
-    public async void ShowMotorScreen()
+    public void FinalWin(){ StartCoroutine(ShowMotorScreen()); }
+
+    public IEnumerator ShowMotorScreen()
     {
         _cameraMovement.enabled = false;
         _motor.SetActive(true);
@@ -150,21 +170,18 @@ public class WinLogic : MonoBehaviour
         _congratulationsCanvas.SetActive(true);
 
         float timer = Time.timeSinceLevelLoad + 2.1f;
-        
-        while(Time.timeSinceLevelLoad <= timer)
-        { 
+
+        while (Time.timeSinceLevelLoad <= timer)
+        {
             _disco.transform.Rotate(Vector3.forward * 600f * Time.deltaTime);
 
-            await Task.Yield();
+            yield return null;
         }
 
-        await Task.Delay(3000);
-
+        yield return new WaitForSeconds(3f);
 
         _sceneController.MainMenu();
     }
-
-
 
 
 

@@ -6,12 +6,13 @@ using static SimulationManager;
 
 public class LigDesligCtrl : MonoBehaviour
 {
+    [Header("--- Logical --- ")]
     private InputCtrl _inputCtrl;
-    public bool isOn = false;
-
     [SerializeField] private ChaveGeralCtrl _chaveGeralCtrl;
+    [SerializeField] private EmergencyStopCtrl emergencyStopCtrl;
 
-    private bool _powerConnection;
+    [Header("--- Misc --- ")]
+    public bool isOn = false;
 
     void Awake()
     {
@@ -28,14 +29,14 @@ public class LigDesligCtrl : MonoBehaviour
         if(_gameState == GameState.PowerConnection)
         {
             //Check is the previous logic point is active first
-            if (_chaveGeralCtrl.isOn)
+            if (_chaveGeralCtrl.isOn && emergencyStopCtrl.isPressed == false)
             {
                 if (_inputCtrl.click && _inputCtrl.currentObject == this.gameObject)
                 {
                     if (isOn == false)
-                        StartCoroutine(press(8.6e-05f));
+                        StartCoroutine(Press(8.6e-05f));
                     else
-                        StartCoroutine(press(8.6e-05f));
+                        StartCoroutine(Press(8.6e-05f));
                 }
             }
             else
@@ -45,10 +46,11 @@ public class LigDesligCtrl : MonoBehaviour
         }
     }
 
-    public IEnumerator press(float pressDepth)
+    //Press a button down and call the opposite movement later
+    public IEnumerator Press(float PressDepth)
     {
         Transform trans = this.gameObject.transform;
-        while (trans.localPosition.y <= pressDepth)
+        while (trans.localPosition.y <= PressDepth)
         {
             this.gameObject.GetComponent<CapsuleCollider>().enabled = false;
             trans.Translate(0, 0 + 240.0e-06f, 0, Space.Self);
@@ -60,10 +62,10 @@ public class LigDesligCtrl : MonoBehaviour
         else
             isOn = false;
 
-        StartCoroutine(release(trans));
+        StartCoroutine(Release(trans));
     }
 
-    public IEnumerator release(Transform trans)
+    public IEnumerator Release(Transform trans)
     {
         while (trans.localPosition.y >= 0f)
         {
@@ -72,5 +74,6 @@ public class LigDesligCtrl : MonoBehaviour
         }
         this.gameObject.GetComponent<CapsuleCollider>().enabled = true;
     }
+
 
 }

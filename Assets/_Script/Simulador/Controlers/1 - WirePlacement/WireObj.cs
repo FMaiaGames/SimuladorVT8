@@ -5,44 +5,37 @@ using static SimulationManager;
 
 public class WireOBj : MonoBehaviour
 {
-    public GameObject FirstPort;
-    public GameObject SecondPort;
-    public Material wireColor;
-    public string wireName;
+    [Header("--- Logic ---")]
+    [SerializeField] private InputCtrl _inputCtrl;
 
-    public float Clock;
-
+    [Header("--- Ports ---")]
+    private GameObject _firstPort;
+    private GameObject _secondPort;
 
     private void Awake()
     {
-        FirstPort = null;
-        SecondPort = null;
-        Clock = 0.0f;
+        _firstPort = null;
+        _secondPort = null;
+        _inputCtrl = InputCtrl.Instance;
         SimulationManager.OnStateChanged += OnStateChanged;
     }
 
     // Game State subscription 
     private GameState _gameState;
     private void OnDestroy() { SimulationManager.OnStateChanged -= OnStateChanged; }
-    public void OnStateChanged(GameState state) { _gameState = state; }
+    private void OnStateChanged(GameState state) { _gameState = state; }
 
-    void Update()
+    private void Update()
     {
-        if(_gameState == GameState.WirePlacement)
+        if (_gameState == GameState.WirePlacement)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (Time.time - Clock <= 0.3f)
-                {
-                    DestroyOnTouch();
-                }
-                Clock = Time.time;
-            }
+            if (_inputCtrl.doubleClick == true)
+                DestroyOnTouch();
         }
 
     }
 
-      void DestroyOnTouch()
+    private void DestroyOnTouch()
     {
         Ray ray;
  
@@ -58,25 +51,25 @@ public class WireOBj : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            if(hit.collider.gameObject.name == "Wire" ) 
+            if(hit.collider.gameObject?.name == "Wire" ) 
             {
 
-                FirstPort.GetComponent<PortObj>().isConnected = false;
-                FirstPort.GetComponent<PortObj>().connectedTo.Clear();
+                _firstPort.GetComponent<PortObj>().isConnected = false;
+                _firstPort.GetComponent<PortObj>().connectedTo.Clear();
 
-                SecondPort.GetComponent<PortObj>().isConnected = false;
-                SecondPort.GetComponent<PortObj>().connectedTo.Clear();
+                _secondPort.GetComponent<PortObj>().isConnected = false;
+                _secondPort.GetComponent<PortObj>().connectedTo.Clear();
 
                 Destroy(hit.collider.gameObject);
             }
 
-            if(hit.collider.gameObject.transform.parent.gameObject.name == "Wire")
+            if(hit.collider.gameObject.transform.parent?.gameObject.name == "Wire")
             {
-                FirstPort.GetComponent<PortObj>().isConnected = false;
-                FirstPort.GetComponent<PortObj>().connectedTo.Clear();
+                _firstPort.GetComponent<PortObj>().isConnected = false;
+                _firstPort.GetComponent<PortObj>().connectedTo.Clear();
 
-                SecondPort.GetComponent<PortObj>().isConnected = false;
-                SecondPort.GetComponent<PortObj>().connectedTo.Clear();
+                _secondPort.GetComponent<PortObj>().isConnected = false;
+                _secondPort.GetComponent<PortObj>().connectedTo.Clear();
 
 
                 Destroy(hit.collider.gameObject.transform.parent.gameObject);
@@ -84,5 +77,11 @@ public class WireOBj : MonoBehaviour
         }
     }
 
+    public void SetFirstPort(GameObject gameObject){ _firstPort = gameObject; }   
+
+    public void SetSecondPort(GameObject gameObject){ _secondPort = gameObject; }
+
+    public GameObject GetFirstPort() { return  _firstPort; }
+    public GameObject GetSecondPort() { return  _secondPort; }
 
 }

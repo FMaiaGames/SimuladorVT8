@@ -48,7 +48,6 @@ public class CableCtrl : MonoBehaviour
             }
             else
             {
-                //if (_currentObj != null && _currentObj != _firstPort && _firstPort != null && FirstPlug != null && _inputCtrl.isDraging == true)
                 if (_currentObj != null && _firstPort != null && _currentObj.CompareTag("ports") )
                 {
                     _secondPort = _currentObj;
@@ -56,7 +55,7 @@ public class CableCtrl : MonoBehaviour
                     _secondPlug.transform.rotation = Quaternion.Euler(70.0f, 0.0f, 0.0f);
                     _secondPlug.GetComponent<MeshRenderer>().material = _firstPort.GetComponent<MeshRenderer>().material;
 
-                    if (_firstPort.GetComponent<PortObj>()?.portClasses == _secondPort.GetComponent<PortObj>()?.portClasses)
+                    if ( _firstPort != _secondPort &&  _firstPort.GetComponent<PortObj>()?.portClasses == _secondPort.GetComponent<PortObj>()?.portClasses)
                     {
                         CreateWire(_firstPort, _secondPort, 50.0f, FirstPlug, _secondPlug);
                     }
@@ -70,16 +69,17 @@ public class CableCtrl : MonoBehaviour
                     _secondPort = null;
                     FirstPlug = null;
                     _secondPlug = null;
+
                 }
                 else
                 {
                     _firstPort = null;
                     _secondPort = null;
 
-                    if (FirstPlug != null && FirstPlug.activeSelf == true)
+                    if (FirstPlug != null)
                         Destroy(FirstPlug);
 
-                    if (_secondPlug != null && _secondPlug.activeSelf == true)
+                    if (_secondPlug != null)
                         Destroy(_secondPlug);
 
                     FirstPlug = null;
@@ -146,8 +146,8 @@ public class CableCtrl : MonoBehaviour
 
         //Add the properties to each wire
         completewire.AddComponent<WireOBj>();
-        completewire.GetComponent<WireOBj>().FirstPort = _firstPort;
-        completewire.GetComponent<WireOBj>().SecondPort = _secondPort;
+        completewire.GetComponent<WireOBj>().SetFirstPort(_firstPort);
+        completewire.GetComponent<WireOBj>().SetSecondPort(_secondPort);
         completewire.tag = "Wire";
 
         if(_firstPort.GetComponent<PortObj>() == true && _secondPort.GetComponent<PortObj>() == true)

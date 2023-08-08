@@ -114,13 +114,19 @@ public class ClpCtrl : MonoBehaviour
                 _displayChar[i].text = "";
             }
 
-            // FETCH PARAMETER AND DISPLAY IT
+            // Fetch parameter
             _param = _parameterObj.SearchParam(_key);
-            for (int i = 3; i >= 0; i--)
+
+            if(_param != null)
             {
-                _decimals[i] = _param[i];
-                _displayChar[i].text = _param[i].ToString();
+                for (int i = 3; i >= 0; i--)
+                {
+                    _decimals[i] = _param[i];
+                    _displayChar[i].text = _param[i].ToString();
+                }
             }
+            
+
         }
         else
         {
@@ -130,9 +136,14 @@ public class ClpCtrl : MonoBehaviour
             _selectedDecimal = 3;
 
             //SET THE ASSINGED PARAMETER VALUE
-            if(_decimals.SequenceEqual(_param) == false)
+            if(_param == null)
             {
                 _parameterObj.SetParam(_key, _decimals);
+            }
+            else
+            {
+                if (_decimals.SequenceEqual(_param) == false)
+                    _parameterObj.SetParam(_key, _decimals);
             }
 
             _param = null;
@@ -158,5 +169,20 @@ public class ClpCtrl : MonoBehaviour
         BlinkingChar();
     }
 
+    public void ClosePanel()
+    {
+        //CLOSE THE PARAMETER DISPLAY 
+        _isParOpen = false;
+        _displayP.text = "P";
+        _selectedDecimal = 3;
 
+        // --- CLEAN THE DISPLAY
+        for (int i = 0; i < _decimals.Length; i++)
+        {
+            _decimals[i] = 0;
+            _displayChar[i].text = "0";
+        }
+
+        _clpScreen.SetActive(false);
+    }
 }

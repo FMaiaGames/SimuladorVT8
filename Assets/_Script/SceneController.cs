@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,14 @@ public class SceneController : MonoBehaviour
     public static SceneController Instance;
 
     public void Awake(){ Instance = this; }
+
+    public void Start()
+    {
+        /*
+        DateTime expirationDate = new DateTime(2023, 9, 1);
+        if(DateTime.Now >= expirationDate){Application.Quit();}
+        */
+    }
 
     public void MainMenu(){SceneManager.LoadScene("MainMenu");}
 

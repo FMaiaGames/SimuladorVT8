@@ -5,13 +5,17 @@ using static SimulationManager;
 
 public class EmergencyStopCtrl : MonoBehaviour
 {
+    [Header("--- Logical --- ")]
     private InputCtrl _inputCtrl;
-
     [SerializeField] private LigDesligCtrl _ligDesligCtrl;
+    [SerializeField] private ChaveGeralCtrl _chaveGeralCtrl;
+
+    [Header("--- Misc --- ")]
     [SerializeField] private float _pressDepth;
     [SerializeField] private Light _emergencyLight;
 
-    bool isPressed;
+
+    public bool isPressed;
 
 
     // Game State subscription 
@@ -31,24 +35,27 @@ public class EmergencyStopCtrl : MonoBehaviour
     {
         if(_gameState == GameState.PowerConnection)
         {
-            if (_inputCtrl.click && _inputCtrl.currentObject == this.gameObject)
+            if (_chaveGeralCtrl.isOn == true)
             {
-                if (isPressed == false)
+                if (_inputCtrl.click && _inputCtrl.currentObject == this.gameObject)
                 {
-                    isPressed = true;
-                    PressStay(_pressDepth);
-                }
-                else
-                {
-                    isPressed = false;
-                    ReleaseStay();
+                    if (isPressed == false)
+                        PressStay(_pressDepth);
+                    else
+                        ReleaseStay();
                 }
             }
+            else
+            {
+                ReleaseStay();
+            }
 
+            /*
             if(isPressed == true)
             {
                 _ligDesligCtrl.isOn = false;
             }
+            */
         }
     }
 
@@ -60,11 +67,13 @@ public class EmergencyStopCtrl : MonoBehaviour
             trans.Translate(0, 0, 0 - 0.0005f, Space.Self);
             await Task.Yield();
         }
+        isPressed = true;
         _emergencyLight.enabled = true;
     }
 
     async void ReleaseStay()
     {
+        isPressed = false;
         _emergencyLight.enabled = false;
 
         Transform trans = this.gameObject.transform;

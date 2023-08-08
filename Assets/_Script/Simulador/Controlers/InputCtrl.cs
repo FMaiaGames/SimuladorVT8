@@ -18,9 +18,9 @@ public class InputCtrl : MonoBehaviour
 
     public bool isPressed = false;
     public bool isReleased = false;
-    public bool isDraging = false;
+    public bool isDragging = false;
     public bool doubleClick = false;
-    float doubleClickTime = 0f;
+    private float doubleClickTime = 0f;
 
     [Header("---Positions---")]
     public Vector3 pressedPos = Vector3.zero;
@@ -58,7 +58,7 @@ public class InputCtrl : MonoBehaviour
             isPressed = true;
             pressedPos = Input.mousePosition;
 
-            //Detects double clicks
+            //Detects a double click
             if (Time.time - doubleClickTime <= 0.3f) { doubleClick = true; } else { doubleClick = false; }
             doubleClickTime = Time.time;
 
@@ -70,11 +70,12 @@ public class InputCtrl : MonoBehaviour
             click = false;
             isButtonReleased = true;
             isPressed = false;
+            doubleClick = false;
             releasePos = Input.mousePosition;
         }
 
         //Detects dragging
-        if (isPressed && pressedPos != currentPos) { isDraging = true; } else { isDraging = false; }
+        if (isPressed && pressedPos != currentPos) { isDragging = true; } else { isDragging = false; }
     }
 
     void TouchInput()
@@ -83,7 +84,18 @@ public class InputCtrl : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
 
-            if (touch.phase == TouchPhase.Began) { click = true; } else { click = false; }
+            if (touch.phase == TouchPhase.Began) 
+            { 
+                click = true;
+
+                //Detects double clicks
+                if (Time.time - doubleClickTime <= 0.3f) { doubleClick = true; } else { doubleClick = false; }
+                doubleClickTime = Time.time;
+            } 
+            else 
+            { 
+                click = false; 
+            }
 
             //Detect a button press
             if (touch.phase == TouchPhase.Stationary)
@@ -92,10 +104,9 @@ public class InputCtrl : MonoBehaviour
                 currentPos = Input.GetTouch(0).position;
                 pressedPos = currentPos;
 
-                //Detects double clicks
-                if (Time.time - doubleClickTime <= 0.3f) { doubleClick = true; } else { doubleClick = false; }
-                doubleClickTime = Time.time;
+               
 
+                print(doubleClick);
             }
 
             //Release button
@@ -104,11 +115,12 @@ public class InputCtrl : MonoBehaviour
                 click = false;
                 isButtonReleased = true;
                 isPressed = false;
+                doubleClick = false;
                 releasePos = pressedPos;
             }
 
             //Detects dragging
-            if (touch.phase == TouchPhase.Moved) { isDraging = true; } else { isDraging = false; }
+            if (touch.phase == TouchPhase.Moved) { isDragging = true; } else { isDragging = false; }
 
         }
 

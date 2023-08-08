@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.XR.ARSubsystems;
 
 public class ParameterObj : MonoBehaviour
 {
@@ -19,6 +21,7 @@ public class ParameterObj : MonoBehaviour
             this.value[2] = v2;
             this.value[3] = v3;
         }
+
     }
 
     private void Awake()
@@ -52,9 +55,25 @@ public class ParameterObj : MonoBehaviour
         */
     }
 
+    /*
+    private void Update()
+    {
+        if(parameter != null && parameter.Count > 0)
+        {
+            for (int i = 0; i < parameter.Count; i++)
+                PrintParam(parameter[i].key, parameter[i].value[0], parameter[i].value[1], parameter[i].value[2], parameter[i].value[3]);
+        }
+
+    }
+    */
+
     public int[] SearchParam(string key)
     {
-        for(int i = 0; i <= parameter.Count; i++)
+        if (parameter == null)
+            return null;
+
+
+        for(int i = 0; i < parameter.Count; i++)
         {
             if(string.Equals(key, parameter[i].key))
             {
@@ -70,25 +89,37 @@ public class ParameterObj : MonoBehaviour
             }
         }
         return null;
+        
     }
 
     public void SetParam(string key, int[] value)
     {
-        foreach(Parameter param in parameter)
+        if(parameter.Count == 0)
         {
-            if (string.Equals(key, param.key))
-            {
-                parameter.Remove(param);
-                parameter.Add(new Parameter(key, value[0], value[1], value[2], value[3]));
-            }
-            else
-            {
-                //mensagem de erro
-            }
+            parameter.Add(new Parameter(key, value[0], value[1], value[2], value[3]));
+            return;
         }
+
+        List<Parameter> tempParam = new List<Parameter>();
+
+        for(int i = 0; i < parameter.Count; i++)
+        {
+            if (string.Equals(key, parameter[i].key))
+                parameter[i] = new Parameter(key, value[0], value[1], value[2], value[3]);
+            else
+                tempParam.Add(new Parameter(key, value[0], value[1], value[2], value[3]));
+        }
+
+        if(tempParam.Count > 0)
+        {
+            foreach(Parameter param in tempParam)
+                parameter.Add(param);
+        }
+
+        tempParam.Clear();
     }
 
-    public int CheckWinningParams()
+    public bool CheckWinningParams()
     {
         int winningCount = 0;
 
@@ -116,25 +147,34 @@ public class ParameterObj : MonoBehaviour
 
         winningParameter.Add(new Parameter("0099", 0, 0, 0, 1) );
 
+        int[] compareValue = new int[4];
 
-        for(int  i = 0; i <= winningParameter.Count; i++)
+        for (int  i = 0; i <= winningParameter.Count - 1 ; i++)
         {
+            //Look for the parameter key and return the comparative value to this variable
+            compareValue = SearchParam(winningParameter[i].key);
 
-            int[] compareVallue = SearchParam(winningParameter[i].key);
+            // If null, the student failed
+            if (compareValue == null)
+                return false;
 
-            if(compareVallue == winningParameter[i].value)
+
+            //If true, compare the right value to the current value
+            for (int j = 0; j < compareValue.Length; j++)
             {
-                winningCount++;
+                if (winningParameter[i].value[j] != compareValue[j])
+                    return false;
             }
-            else
-            {
-                winningCount = 0;
-                return 15;
-            }
+
+            return true;
         }
 
-        return 15;
+        print($"Winning number: {winningCount}");
 
+        if (winningCount == 15)
+            return true;
+        else
+            return false;
     }
 
     public void AddWinningParams()
@@ -162,6 +202,16 @@ public class ParameterObj : MonoBehaviour
         parameter.Add(new Parameter("1201", 5, 0, 0, 0));
 
         parameter.Add(new Parameter("0099", 0, 0, 0, 1));
+    }
+
+    public void DeleteParameters()
+    {   
+        parameter?.Clear();
+    }
+
+    void PrintParam(string key, int v0, int v1, int v2, int v3)
+    {
+        print($"{key}, {v0}{v1}{v2}{v3}");
     }
 
 

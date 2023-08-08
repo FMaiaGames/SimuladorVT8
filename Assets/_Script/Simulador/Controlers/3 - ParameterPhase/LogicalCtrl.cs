@@ -53,14 +53,9 @@ public class LogicalCtrl : MonoBehaviour
 
                     //Check the wining 
                     if(_ligDesligCtrl.isOn)
-                    {
                         Activate(_Ligado, _vermelhoLigado);
-                        _winLogic.powerOn = true;
-                    }
                     else
-                    {
                         DeActivate(_Ligado, _vermelhorDesligado);
-                    }
                 }
             }
 
