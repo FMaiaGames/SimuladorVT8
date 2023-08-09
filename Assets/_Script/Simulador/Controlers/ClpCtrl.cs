@@ -16,14 +16,14 @@ public class ClpCtrl : MonoBehaviour
     private GameState _gameState;
 
     [Header("--- Display ---")]
-    [SerializeField] private int[] _decimals; //EACH CHARACTER VALUE FROM THE DISPLAY
-    [SerializeField] private int _selectedDecimal; 
-    [SerializeField] private TMP_Text[] _displayChar;
+    [SerializeField] private int[] _charValue; //The int to each character in the display
+    [SerializeField] private TMP_Text[] _displayChar; //The UI Object of each character in the display
+    [SerializeField] private int _selectedDecimal; //The selected character we are working in
 
     [Header("--- Parameter ---")]
     [SerializeField] private TMP_Text _displayP; //THE DISPLAY "P" ON THE DISPLAY
-    [SerializeField] private string _key; //THE DISPLAY STRING USED TO SEARCH THE ASSIGNED VALUE
-    [SerializeField] private int[] _param; // THE VALUE OF EACH PARAM
+    [SerializeField] private string _paramKey; //THE DISPLAY STRING USED TO SEARCH THE ASSIGNED VALUE
+    [SerializeField] private int[] _paramValue; // THE VALUE OF EACH PARAM
     [SerializeField] private bool _isParOpen = false;
 
     // Game State subscription 
@@ -39,6 +39,7 @@ public class ClpCtrl : MonoBehaviour
             _gameState = state;
 
     }
+
     void Start()
     {
         _inputCtrl = InputCtrl.Instance;
@@ -60,26 +61,32 @@ public class ClpCtrl : MonoBehaviour
                 _clpScreen.SetActive(true);
         }
 
-        _displayChar[0].text = _decimals[0].ToString();
-        _displayChar[1].text = _decimals[1].ToString();
-        _displayChar[2].text = _decimals[2].ToString();
-        _displayChar[3].text = _decimals[3].ToString();
+        _displayChar[0].text = _charValue[0].ToString();
+        _displayChar[1].text = _charValue[1].ToString();
+        _displayChar[2].text = _charValue[2].ToString();
+        _displayChar[3].text = _charValue[3].ToString();
+
+        //Update the parameter panel
+        _parameterObj.UpdateParamPanel();
+
     }
 
-    public void AddInt()
+    public void IncrementChar()
     {
-        if(_decimals[_selectedDecimal] == 9)
-            _decimals[_selectedDecimal] = 0;
+        //Increment value of the selected decimal char
+        if(_charValue[_selectedDecimal] == 9)
+            _charValue[_selectedDecimal] = 0;
         else
-            _decimals[_selectedDecimal]++;
+            _charValue[_selectedDecimal]++;
     }
 
-    public void DecreaseInt()
+    public void DecrementChar()
     {
-        if (_decimals[_selectedDecimal] == 0)
-            _decimals[_selectedDecimal] = 9;
+        //Decrement value of the selected decimal char
+        if (_charValue[_selectedDecimal] == 0)
+            _charValue[_selectedDecimal] = 9;
         else
-            _decimals[_selectedDecimal]--;
+            _charValue[_selectedDecimal]--;
     }
 
     public void SelectLeft()
@@ -94,7 +101,7 @@ public class ClpCtrl : MonoBehaviour
             _selectedDecimal--;
     }
 
-    public void Parameter()
+    public void SetParameters()
     {
         //Make sure the character isn't transparent
         _displayChar[_selectedDecimal].color = new Color(255f, 0f, 0f, 255f);
@@ -102,63 +109,57 @@ public class ClpCtrl : MonoBehaviour
         //Open the parameter display
         if (_isParOpen == false)
         {
+            //Prepare the display
             _isParOpen = true;
             _displayP.text = " ";
             _selectedDecimal = 3;
-            _key = _decimals[0].ToString() + _decimals[1].ToString() + _decimals[2].ToString() + _decimals[3].ToString();
 
-            // CLEAN DISPLAY
-            for (int i = 0; i < _decimals.Length; i++)
+            _paramKey = _charValue[0].ToString() + _charValue[1].ToString() + _charValue[2].ToString() + _charValue[3].ToString();
+
+            //Clean the display string
+            for (int i = 0; i < _charValue.Length; i++)
             {
-                _decimals[i] = 0;
+                _charValue[i] = 0;
                 _displayChar[i].text = "";
             }
 
             // Fetch parameter
-            _param = _parameterObj.SearchParam(_key);
+            _paramValue = _parameterObj.SearchParamValue(_paramKey);
 
-            if(_param != null)
+            //Display assign each 
+            for (int i = 3; i >= 0; i--)
             {
-                for (int i = 3; i >= 0; i--)
-                {
-                    _decimals[i] = _param[i];
-                    _displayChar[i].text = _param[i].ToString();
-                }
+                _charValue[i] = _paramValue[i];
+                _displayChar[i].text = _paramValue[i].ToString();
             }
-            
 
         }
         else
         {
-            //CLOSE THE PARAMETER DISPLAY 
+
+            //Prepare the display
             _isParOpen = false;
             _displayP.text = "P";
             _selectedDecimal = 3;
 
             //SET THE ASSINGED PARAMETER VALUE
-            if(_param == null)
-            {
-                _parameterObj.SetParam(_key, _decimals);
-            }
-            else
-            {
-                if (_decimals.SequenceEqual(_param) == false)
-                    _parameterObj.SetParam(_key, _decimals);
-            }
+            _parameterObj.SetParam(_paramKey, _charValue);
 
-            _param = null;
+            _paramValue = null;
 
-            // --- CLEAN THE DISPLAY
-            for (int i = 0; i < _decimals.Length; i++)
+            // CLEAN THE DISPLAY
+            for (int i = 0; i < _charValue.Length; i++)
             {
-                _decimals[i] = 0;
+                _charValue[i] = 0;
                 _displayChar[i].text = "0";
             }
+
         }
     }
 
     async void BlinkingChar()
     {
+        //Blink the character alpha every 0.25s
         if (_displayChar[_selectedDecimal].color.a == 255)
             _displayChar[_selectedDecimal].color = new Color(255f, 0f, 0f, 0f);
         else
@@ -177,9 +178,9 @@ public class ClpCtrl : MonoBehaviour
         _selectedDecimal = 3;
 
         // --- CLEAN THE DISPLAY
-        for (int i = 0; i < _decimals.Length; i++)
+        for (int i = 0; i < _charValue.Length; i++)
         {
-            _decimals[i] = 0;
+            _charValue[i] = 0;
             _displayChar[i].text = "0";
         }
 

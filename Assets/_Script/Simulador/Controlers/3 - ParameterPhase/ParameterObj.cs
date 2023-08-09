@@ -1,12 +1,16 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.ARSubsystems;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class ParameterObj : MonoBehaviour
 {
     public static ParameterObj Instance;
-    public List<Parameter> parameter;
+    public List<Parameter> parameterList;
+
+    [SerializeField] private TMP_Text _paramPanel;
 
     public class Parameter 
     { 
@@ -27,96 +31,47 @@ public class ParameterObj : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-
-        parameter = new List<Parameter>();
-
-        /*
-        // --- LIBERA ACESSO
-        parameter.Add(new Parameter("0000", 0, 0, 0, 5) );
-        parameter.Add(new Parameter("0204", 0, 0, 1, 3) );
-
-        // --- MODO POSICIONADOR
-        parameter.Add(new Parameter("0385", 0, 0, 2, 2) );
-        parameter.Add(new Parameter("0202", 0, 0, 0, 3) );
-        parameter.Add(new Parameter("1070", 0, 0, 0, 0) );
-        parameter.Add(new Parameter("1081", 0, 0, 0, 1) );
-        parameter.Add(new Parameter("1101", 0, 0, 0, 1) );
-        parameter.Add(new Parameter("1102", 0, 0, 0, 0) );
-
-        // --- MOVIMENTO 1
-        parameter.Add(new Parameter("1151", 0, 0, 0, 3) );
-        parameter.Add(new Parameter("1161", 0, 0, 0, 0) );
-        parameter.Add(new Parameter("1171", 8, 1, 9, 2) );
-        parameter.Add(new Parameter("1181", 0, 0, 0, 3) );
-        parameter.Add(new Parameter("1191", 0, 1, 0, 0) );
-        parameter.Add(new Parameter("1201", 5, 0, 0, 0) );
-
-        parameter.Add(new Parameter("0099", 0, 0, 0, 1) );
-        */
+        parameterList = new List<Parameter>();
     }
 
-    /*
-    private void Update()
+    public int[] SearchParamValue(string key)
     {
-        if(parameter != null && parameter.Count > 0)
+        //Returns the value of a parameter by it's key. If there are none, it will create one with the value 0000
+
+        for(int i = 0; i < parameterList.Count; i++)
         {
-            for (int i = 0; i < parameter.Count; i++)
-                PrintParam(parameter[i].key, parameter[i].value[0], parameter[i].value[1], parameter[i].value[2], parameter[i].value[3]);
+            //Search for the key in all stored parameters
+            if(string.Equals(key, parameterList[i].key))
+                return parameterList[i].value;
         }
 
-    }
-    */
+        //If there is no parameter, create one with the value 0000
+        int[] tmpParam = new int[4];
+        for (int j = 0; j < tmpParam.Length; j++)
+            tmpParam[j] = 0;
 
-    public int[] SearchParam(string key)
-    {
-        if (parameter == null)
-            return null;
-
-
-        for(int i = 0; i < parameter.Count; i++)
-        {
-            if(string.Equals(key, parameter[i].key))
-            {
-                return parameter[i].value;
-            }
-            else
-            {
-                int[] tmpParam = new int[4];
-                for (int j = 0; j < tmpParam.Length; j++)
-                    tmpParam[j] = 0;
-
-                return tmpParam;
-            }
-        }
-        return null;
+        return tmpParam;
         
     }
 
     public void SetParam(string key, int[] value)
     {
-        if(parameter.Count == 0)
+        //Search for the parameter
+        foreach (Parameter param in parameterList)
         {
-            parameter.Add(new Parameter(key, value[0], value[1], value[2], value[3]));
-            return;
+            if (param.key == key)
+            {
+                //If found, update the value and return
+                for (int i = 0; i <= 3; i++)
+                    param.value[i] = value[i];
+
+                return;
+            }
         }
 
-        List<Parameter> tempParam = new List<Parameter>();
+        //If there were no keys found, add one
+        parameterList.Add(new Parameter(key, value[0], value[1], value[2], value[3]));
 
-        for(int i = 0; i < parameter.Count; i++)
-        {
-            if (string.Equals(key, parameter[i].key))
-                parameter[i] = new Parameter(key, value[0], value[1], value[2], value[3]);
-            else
-                tempParam.Add(new Parameter(key, value[0], value[1], value[2], value[3]));
-        }
-
-        if(tempParam.Count > 0)
-        {
-            foreach(Parameter param in tempParam)
-                parameter.Add(param);
-        }
-
-        tempParam.Clear();
     }
 
     public bool CheckWinningParams()
@@ -137,14 +92,7 @@ public class ParameterObj : MonoBehaviour
         winningParameter.Add(new Parameter("1101", 0, 0, 0, 1) );
         winningParameter.Add(new Parameter("1102", 0, 0, 0, 0) );
 
-        // --- MOVIMENTO 1
         winningParameter.Add(new Parameter("1151", 0, 0, 0, 3) );
-        winningParameter.Add(new Parameter("1161", 0, 0, 0, 0) );
-        winningParameter.Add(new Parameter("1171", 8, 1, 9, 2) );
-        winningParameter.Add(new Parameter("1181", 0, 0, 0, 3) );
-        winningParameter.Add(new Parameter("1191", 0, 1, 0, 0) );
-        winningParameter.Add(new Parameter("1201", 5, 0, 0, 0) );
-
         winningParameter.Add(new Parameter("0099", 0, 0, 0, 1) );
 
         int[] compareValue = new int[4];
@@ -152,7 +100,7 @@ public class ParameterObj : MonoBehaviour
         for (int  i = 0; i <= winningParameter.Count - 1 ; i++)
         {
             //Look for the parameter key and return the comparative value to this variable
-            compareValue = SearchParam(winningParameter[i].key);
+            compareValue = SearchParamValue(winningParameter[i].key);
 
             // If null, the student failed
             if (compareValue == null)
@@ -177,41 +125,39 @@ public class ParameterObj : MonoBehaviour
             return false;
     }
 
-    public void AddWinningParams()
+    public void AddWinningParams()  //Add the winning parameters only to test in editor
     {
-        parameter.Clear();
+        parameterList.Clear();
 
         // --- LIBERA ACESSO
-        parameter.Add(new Parameter("0000", 0, 0, 0, 5));
-        parameter.Add(new Parameter("0204", 0, 0, 1, 3));
+        parameterList.Add(new Parameter("0000", 0, 0, 0, 5));
+        parameterList.Add(new Parameter("0204", 0, 0, 1, 3));
 
         // --- MODO POSICIONADOR
-        parameter.Add(new Parameter("0385", 0, 0, 2, 2));
-        parameter.Add(new Parameter("0202", 0, 0, 0, 3));
-        parameter.Add(new Parameter("1070", 0, 0, 0, 0));
-        parameter.Add(new Parameter("1081", 0, 0, 0, 1));
-        parameter.Add(new Parameter("1101", 0, 0, 0, 1));
-        parameter.Add(new Parameter("1102", 0, 0, 0, 0));
+        parameterList.Add(new Parameter("0385", 0, 0, 2, 2));
+        parameterList.Add(new Parameter("0202", 0, 0, 0, 3));
+        parameterList.Add(new Parameter("1070", 0, 0, 0, 0));
+        parameterList.Add(new Parameter("1081", 0, 0, 0, 1));
+        parameterList.Add(new Parameter("1101", 0, 0, 0, 1));
+        parameterList.Add(new Parameter("1102", 0, 0, 0, 0));
 
-        // --- MOVIMENTO 1
-        parameter.Add(new Parameter("1151", 0, 0, 0, 3));
-        parameter.Add(new Parameter("1161", 0, 0, 0, 0));
-        parameter.Add(new Parameter("1171", 8, 1, 9, 2));
-        parameter.Add(new Parameter("1181", 0, 0, 0, 3));
-        parameter.Add(new Parameter("1191", 0, 1, 0, 0));
-        parameter.Add(new Parameter("1201", 5, 0, 0, 0));
-
-        parameter.Add(new Parameter("0099", 0, 0, 0, 1));
+        parameterList.Add(new Parameter("1151", 0, 0, 0, 3));
+        parameterList.Add(new Parameter("0099", 0, 0, 0, 1));
     }
 
-    public void DeleteParameters()
-    {   
-        parameter?.Clear();
-    }
+    public void DeleteParameters(){ parameterList?.Clear(); }  //Clean parameters list
 
-    void PrintParam(string key, int v0, int v1, int v2, int v3)
+    void PrintParam(string key, int v0, int v1, int v2, int v3){ print($"{key}, {v0}{v1}{v2}{v3}"); } //Print parameters for debug purposes
+
+    public void UpdateParamPanel() 
     {
-        print($"{key}, {v0}{v1}{v2}{v3}");
+        //Display the parameters
+        string paramDisplay = null;
+
+        for(int i = 0; i < parameterList.Count; i++)
+            paramDisplay += $"P{parameterList[i].key} = {parameterList[i].value[0]}{parameterList[i].value[1]}{parameterList[i].value[2]}{parameterList[i].value[3]} \n";
+
+        _paramPanel.text = paramDisplay;
     }
 
 

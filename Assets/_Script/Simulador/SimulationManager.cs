@@ -51,7 +51,7 @@ public class SimulationManager : MonoBehaviour
 
     public void IncrementState()
     {
-        State = GameState.PowerConnection;
+        State = GameState.ParameterPhase;
 
         UpdateGameState(State);
     }
