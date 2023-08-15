@@ -1,12 +1,13 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using static SimulationManager;
 using System.Collections;
+using System.Collections.Generic;
 
 public class WinLogic : MonoBehaviour
 {
+    public static WinLogic Instance;
+
     private GameObject[] _wires;
     private int _conditions = 0;
 
@@ -23,6 +24,7 @@ public class WinLogic : MonoBehaviour
     [SerializeField] private DisjuntorCtrl _disjuntorCtrl;
     [SerializeField] private DRCtrl _dRCtrl;
     [SerializeField] private ParameterObj _parameterObj;
+    [SerializeField] private List<ChaveCtrl> _chaves;
 
     [Header("--- WinLogic --- ")]
     [SerializeField] private GameObject _motor;
@@ -33,7 +35,7 @@ public class WinLogic : MonoBehaviour
     // Game State subscription 
     private GameState _gameState;
 
-    private void Awake(){ SimulationManager.OnStateChanged += OnStateChanged; }
+    private void Awake(){ Instance = this;  SimulationManager.OnStateChanged += OnStateChanged; }
     private void OnDestroy() { SimulationManager.OnStateChanged -= OnStateChanged; }
     private void OnStateChanged(GameState state) { _gameState = state; }
 
@@ -109,7 +111,7 @@ public class WinLogic : MonoBehaviour
     private void PowerResult()
     {
         //Check is the main power node is powered and ready
-        if (_ligDesligCtrl.isOn == true)
+        if (_ligDesligCtrl.IsOn() == true)
         {
             WinDisplay();
             SimulationManager.Instance.UpdateGameState(GameState.ParameterPhase);
@@ -120,7 +122,7 @@ public class WinLogic : MonoBehaviour
 
     private void ParameterResult()
     {
-        if (_parameterObj.CheckWinningParams() == true)
+        if (_parameterObj.CheckWinningParams() == true && CheckChaves() == true)
             FinalWin();
         else
             LoseDisplay();
@@ -147,11 +149,12 @@ public class WinLogic : MonoBehaviour
                 _losingDisplay.SetActive(false);
                 break;
             case GameState.PowerConnection:
-                _dRCtrl.isOn = false;
+                //_dRCtrl.isOn = false;
                 _losingDisplay.SetActive(false);
                 break;
             case GameState.ParameterPhase:
                 _parameterObj.DeleteParameters();
+                ResetChaves();
                 _losingDisplay.SetActive(false);
                 break;
             case GameState.EndGame:
@@ -183,9 +186,30 @@ public class WinLogic : MonoBehaviour
         _sceneController.MainMenu();
     }
 
+    private bool CheckChaves()
+    {
+        bool checkCorrect = false;
+
+        if (_chaves[0].IsOn() == true)
+            checkCorrect = true;
 
 
+        for (int i = 1; i < _chaves.Count; i++)
+        {
+            if (_chaves[i].IsOn() == true)
+                checkCorrect = false;
+        }
 
+
+        return checkCorrect;
+
+    }
+
+    private void ResetChaves()
+    {
+        foreach (ChaveCtrl chave in _chaves)
+            chave.TurnOff();
+    }
 
 
 }

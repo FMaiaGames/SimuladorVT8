@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using static SimulationManager;
 
@@ -8,25 +6,23 @@ public class DRCtrl : MonoBehaviour
     private InputCtrl _inputCtrl;
 
     [SerializeField] private GameObject _lever;
-    public bool isOn = false;
+    [SerializeField] private bool isOn = false;
 
-    [Header("--- Positions --- ")]
+    //Original off position
     private Vector3 originalPos;
     private Quaternion originalRot;
+
+    //New On position
     private Vector3 newPos;
     private Quaternion newRot;
 
-
-    
     // Game State subscription 
     private GameState _gameState;
     private void Awake() { SimulationManager.OnStateChanged += OnStateChanged; }
     private void OnDestroy() { SimulationManager.OnStateChanged -= OnStateChanged; }
-    public void OnStateChanged(GameState state) { _gameState = state; }
+    private void OnStateChanged(GameState state) { _gameState = state; }
 
-    // --- THE NEXT LOGIC NODE IS DisjuntorCtrl
-
-    void Start()
+    private void Start()
     {
         _inputCtrl = InputCtrl.Instance;
 
@@ -38,7 +34,7 @@ public class DRCtrl : MonoBehaviour
         newRot = Quaternion.Euler(new Vector3(0f, 0f, -180f) ); 
     }
 
-    void Update()
+    private void Update()
     {
         if(_gameState == GameState.PowerConnection)
         {
@@ -55,10 +51,18 @@ public class DRCtrl : MonoBehaviour
                     _lever.transform.SetPositionAndRotation(originalPos, originalRot);
                 }
             }
-
-            if(isOn == false)
-                _lever.transform.SetPositionAndRotation(originalPos, originalRot);
-
         }
     }
+
+    public bool IsOn()
+    {
+        return isOn;
+    }
+
+    public void TurnOff()
+    {
+        isOn = false;
+        _lever.transform.SetPositionAndRotation(originalPos, originalRot);
+    }
+
 }

@@ -3,53 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using static SimulationManager;
 
-public class ChaveGeralCtrl : MonoBehaviour
+public class ChaveCtrl : MonoBehaviour
 {
     private InputCtrl _inputCtrl;
+    private WinLogic _winLogic;
 
-    private GameObject _lever;
+    [SerializeField] private GameObject _lever;
     [SerializeField] private bool isOn = false;
 
     //Original off position
+    private Vector3 originalPos;
     private Quaternion originalRot;
 
     //New On position
-    private Quaternion newRot;
-
-    private void Awake(){ SimulationManager.OnStateChanged += OnStateChanged; }
+    [SerializeField] private Vector3 newPos;
+    [SerializeField] private Quaternion newRot;
 
     private GameState _gameState;
+    private void Awake() { SimulationManager.OnStateChanged += OnStateChanged; }
     private void OnDestroy() { SimulationManager.OnStateChanged -= OnStateChanged; }
     private void OnStateChanged(GameState state) { _gameState = state; }
 
     private void Start()
     {
         _inputCtrl = InputCtrl.Instance;
+        _winLogic = WinLogic.Instance;
 
         _lever = this.gameObject;
-
-        // Set the original position and rotation
-        originalRot = _lever.transform.rotation;
-
-        //Set the new position on rotation
-        newRot = Quaternion.Euler(new Vector3(0, 0, 90f));
+        _lever.transform.GetPositionAndRotation(out originalPos, out originalRot);
     }
 
+    // Update is called once per frame
     private void Update()
     {
-        if(_gameState == GameState.PowerConnection)
+        if (_gameState == GameState.ParameterPhase)
         {
             if (_inputCtrl.click && _inputCtrl.currentObject == this.gameObject)
             {
                 if (isOn == false)
                 {
                     isOn = true;
-                    _lever.transform.localRotation = newRot;
+                    _lever.transform.SetLocalPositionAndRotation(newPos, newRot);
+                    _winLogic.WinConditions();
                 }
                 else
                 {
                     isOn = false;
-                    _lever.transform.rotation = originalRot;
+                    _lever.transform.SetPositionAndRotation(originalPos, originalRot);
                 }
             }
         }
@@ -63,7 +63,10 @@ public class ChaveGeralCtrl : MonoBehaviour
     public void TurnOff()
     {
         isOn = false;
-        _lever.transform.rotation = originalRot;
+        _lever.transform.SetPositionAndRotation(originalPos, originalRot);
     }
+
+
+
 
 }

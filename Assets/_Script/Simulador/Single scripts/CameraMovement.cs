@@ -11,12 +11,19 @@ public class CameraMovement : MonoBehaviour
     private float _screenWidth;
     private float _screenHeight;
 
-    [Header("--- Positions Min & Max ---")]
+    [Header("--- Mouse Cam Position Min & Max ---")]
     [SerializeField] private float _xMin;
     [SerializeField] private float _xMax;
 
     [SerializeField] private float _yMin;
     [SerializeField] private float _yMax;
+
+    [Header("--- Touch Cam Position Min & Max ---")]
+    [SerializeField] private float _xMinT;
+    [SerializeField] private float _xMaxT;
+
+    [SerializeField] private float _yMinT;
+    [SerializeField] private float _yMaxT;
 
     [Header("--- Zoom ---")]
     [SerializeField] private float _zoomMin;
@@ -104,8 +111,8 @@ public class CameraMovement : MonoBehaviour
                 _newPosition = Vector3.zero;
                 _newPosition = _cam.transform.position - new Vector3(touch.deltaPosition.x * -0.0005f, touch.deltaPosition.y * 0.0005f, 0f);
 
-                float clampedX = Mathf.Clamp(_newPosition.x, 2.0f, 4.2f);
-                float clampedy = Mathf.Clamp(_newPosition.y, 0.1f, 0.4f);
+                float clampedX = Mathf.Clamp(_newPosition.x, _xMinT, _xMaxT);
+                float clampedy = Mathf.Clamp(_newPosition.y, _yMinT, _yMaxT);
 
                 _cam.transform.position = new Vector3(clampedX, clampedy, _cam.transform.position.z);
             }

@@ -10295,7 +10295,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Aplica\xE7\xF5es"
+  m_text: "Aplica\xE7\xE3o"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7ecba5ef09e14c643b5fde16c29f206f, type: 2}
   m_sharedMaterial: {fileID: -410432689088591074, guid: 7ecba5ef09e14c643b5fde16c29f206f,
@@ -10323,7 +10323,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 51.75
+  m_fontSize: 52.5
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1

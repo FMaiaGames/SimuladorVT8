@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -36,6 +37,9 @@ public class ParameterObj : MonoBehaviour
 
     public int[] SearchParamValue(string key)
     {
+        if (parameterList == null)
+            parameterList = new List<Parameter>();
+
         //Returns the value of a parameter by it's key. If there are none, it will create one with the value 0000
 
         for(int i = 0; i < parameterList.Count; i++)
@@ -76,31 +80,33 @@ public class ParameterObj : MonoBehaviour
 
     public bool CheckWinningParams()
     {
-        int winningCount = 0;
+        int winCount = 0;
 
-        List<Parameter> winningParameter = new List<Parameter>();
+        List<Parameter> rightParam = new List<Parameter>();
 
         // --- LIBERA ACESSO
-        winningParameter.Add(new Parameter("0000", 0, 0, 0, 5) );
-        winningParameter.Add(new Parameter("0204", 0, 0, 1, 3) );
+        rightParam.Add(new Parameter("0000", 0, 0, 0, 5) );
+        rightParam.Add(new Parameter("0204", 0, 0, 1, 3) );
 
         // --- MODO POSICIONADOR
-        winningParameter.Add(new Parameter("0385", 0, 0, 2, 2) );
-        winningParameter.Add(new Parameter("0202", 0, 0, 0, 3) );
-        winningParameter.Add(new Parameter("1070", 0, 0, 0, 0) );
-        winningParameter.Add(new Parameter("1081", 0, 0, 0, 1) );
-        winningParameter.Add(new Parameter("1101", 0, 0, 0, 1) );
-        winningParameter.Add(new Parameter("1102", 0, 0, 0, 0) );
+        rightParam.Add(new Parameter("0385", 0, 0, 2, 2) );
+        rightParam.Add(new Parameter("0202", 0, 0, 0, 3) );
+        rightParam.Add(new Parameter("1070", 0, 0, 0, 0) );
+        rightParam.Add(new Parameter("1081", 0, 0, 0, 1) );
+        rightParam.Add(new Parameter("1101", 0, 0, 0, 1) );
+        rightParam.Add(new Parameter("1102", 0, 0, 0, 0) );
 
-        winningParameter.Add(new Parameter("1151", 0, 0, 0, 3) );
-        winningParameter.Add(new Parameter("0099", 0, 0, 0, 1) );
+        rightParam.Add(new Parameter("1151", 0, 0, 0, 3) );
+        rightParam.Add(new Parameter("0099", 0, 0, 0, 1) );
 
         int[] compareValue = new int[4];
 
-        for (int  i = 0; i <= winningParameter.Count - 1 ; i++)
+        for (int  i = 0; i < rightParam.Count ; i++)
         {
+            //print($"{i} Key: {rightParam[i].key} - {rightParam[i].value}");
+
             //Look for the parameter key and return the comparative value to this variable
-            compareValue = SearchParamValue(winningParameter[i].key);
+            compareValue = SearchParamValue(rightParam[i].key);
 
             // If null, the student failed
             if (compareValue == null)
@@ -110,19 +116,60 @@ public class ParameterObj : MonoBehaviour
             //If true, compare the right value to the current value
             for (int j = 0; j < compareValue.Length; j++)
             {
-                if (winningParameter[i].value[j] != compareValue[j])
+                if (rightParam[i].value[j] != compareValue[j])
                     return false;
             }
 
-            return true;
+            //If There is nothing wrong, increment winning counter 
+            winCount++;
         }
 
-        print($"Winning number: {winningCount}");
+        if (CompareToZero("1171") == false)
+            winCount++;
 
-        if (winningCount == 15)
+        if (CompareToZero("1181") == false)
+            winCount++;
+
+        if (CompareToZero("1191") == false)
+            winCount++;
+
+        if (CompareToZero("1201") == false)
+            winCount++;
+
+        if (CompareToZero("1202") == false)
+            winCount++;
+
+        print($"Winning number: {winCount}");
+
+        if (winCount == 15)
             return true;
         else
             return false;
+    }
+
+    public bool CompareToZero(string key) //Use to find out it a value int[] is different from "0000"
+    {  
+        int[] zero = new int[4];
+
+        zero[0] = 0;
+        zero[1] = 0;
+        zero[2] = 0;
+        zero[3] = 0;
+
+        int[] compareValue = new int[4];
+        int winCount = 0;
+
+        for (int j = 0; j < compareValue.Length; j++)
+        {
+            if (zero[j] == compareValue[j])
+               winCount++;
+        }
+
+        if (winCount <= 3)
+            return true;
+        else
+            return false;
+
     }
 
     public void AddWinningParams()  //Add the winning parameters only to test in editor
@@ -143,6 +190,13 @@ public class ParameterObj : MonoBehaviour
 
         parameterList.Add(new Parameter("1151", 0, 0, 0, 3));
         parameterList.Add(new Parameter("0099", 0, 0, 0, 1));
+        parameterList.Add(new Parameter("0099", 0, 0, 0, 1));
+
+        parameterList.Add(new Parameter("1171", 0, 0, 0, 1));
+        parameterList.Add(new Parameter("1181", 0, 0, 0, 1));
+        parameterList.Add(new Parameter("1191", 0, 0, 0, 1));
+        parameterList.Add(new Parameter("1201", 0, 0, 0, 1));
+        parameterList.Add(new Parameter("1202", 0, 0, 0, 1));
     }
 
     public void DeleteParameters(){ parameterList?.Clear(); }  //Clean parameters list
@@ -154,7 +208,7 @@ public class ParameterObj : MonoBehaviour
         //Display the parameters
         string paramDisplay = null;
 
-        for(int i = 0; i < parameterList.Count; i++)
+        for(int i = 0; i < parameterList?.Count; i++)
             paramDisplay += $"P{parameterList[i].key} = {parameterList[i].value[0]}{parameterList[i].value[1]}{parameterList[i].value[2]}{parameterList[i].value[3]} \n";
 
         _paramPanel.text = paramDisplay;

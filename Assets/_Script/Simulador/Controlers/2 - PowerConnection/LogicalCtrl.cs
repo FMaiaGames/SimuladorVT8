@@ -11,10 +11,14 @@ using UnityEditor;
 public class LogicalCtrl : MonoBehaviour
 {
     [Header("--- Logical --- ")]
-    [SerializeField] private DisjuntorCtrl _disjuntorCtrl;
-    [SerializeField] private ChaveGeralCtrl _chaveGeralCtrl;
     [SerializeField] private LigDesligCtrl _ligDesligCtrl;
     [SerializeField] private WinLogic _winLogic;
+
+    [Header("--- Trio Alimentação--- ")]
+    [SerializeField] private DRCtrl _drCtrl;
+    [SerializeField] private DisjuntorCtrl _disjuntorCtrl;
+    [SerializeField] private ChaveGeralCtrl _chaveGeralCtrl;
+    [SerializeField] private bool _IsTrioOn = false;
 
     [Header("--- Btn Desligado --- ")]
     [SerializeField] private GameObject _btnDesligado;
@@ -38,48 +42,60 @@ public class LogicalCtrl : MonoBehaviour
     private GameState _gameState;
     private void Awake() { SimulationManager.OnStateChanged += OnStateChanged; }
     private void OnDestroy() { SimulationManager.OnStateChanged -= OnStateChanged; }
-    public void OnStateChanged(GameState state) { _gameState = state; }
+    private void OnStateChanged(GameState state) { _gameState = state; }
 
     private void Update()
     {
         if(_gameState == GameState.PowerConnection)
         {
-            if(_disjuntorCtrl.isOn)
+            //are the basic energy switches on
+            if (_drCtrl.IsOn() == true && _disjuntorCtrl.IsOn() == true && _chaveGeralCtrl.IsOn() == true)
+                _IsTrioOn = true;
+            else
+                _IsTrioOn = false;
+
+            //If trio on, energize the panel
+            if(_IsTrioOn == true) 
             {
-                if(_chaveGeralCtrl.isOn) 
-                {
-                    Activate(_btnDesligado, _verdeLigado);
-                    Activate(_24vcc, _brancoLigado);
+                Activate(_btnDesligado, _verdeLigado);
+                Activate(_24vcc, _brancoLigado);
 
-                    //Check the wining 
-                    if(_ligDesligCtrl.isOn)
-                        Activate(_Ligado, _vermelhoLigado);
-                    else
-                        DeActivate(_Ligado, _vermelhorDesligado);
-                }
+                //Check the wining 
+                if(_ligDesligCtrl.IsOn() == true)
+                    Activate(_Ligado, _vermelhoLigado);
+                else
+                    DeActivate(_Ligado, _vermelhorDesligado);
             }
-
-            //Turn everything off
-            if(!_chaveGeralCtrl.isOn || !_disjuntorCtrl.isOn) 
+            else
             {
                 _btnDesligado.GetComponent<Renderer>().material = _verdeDesligado;
                 _24vcc.GetComponent<Renderer>().material = _brancoDesligado;
                 _Ligado.GetComponent<Renderer>().material = _vermelhorDesligado;
-            
             }
+
         }
 
     }
-    void Activate( GameObject obj, Material mat)
+    private void Activate( GameObject obj, Material mat)
     {
         obj.GetComponent<Renderer>().material = mat;
     }
 
-    void DeActivate(GameObject obj, Material mat)
+    private void DeActivate(GameObject obj, Material mat)
     {
         Activate(obj, mat);
     }
 
+    public void ResetTrio()
+    {
+        _drCtrl.TurnOff();
+        _disjuntorCtrl.TurnOff();
+        _chaveGeralCtrl.TurnOff();
+        _IsTrioOn = false;
+    }
 
-
+    public bool GetTrioStatus()
+    {
+        return _IsTrioOn;
+    }
 }

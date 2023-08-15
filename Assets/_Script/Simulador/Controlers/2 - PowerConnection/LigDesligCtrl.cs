@@ -8,11 +8,11 @@ public class LigDesligCtrl : MonoBehaviour
 {
     [Header("--- Logical --- ")]
     private InputCtrl _inputCtrl;
-    [SerializeField] private ChaveGeralCtrl _chaveGeralCtrl;
-    [SerializeField] private EmergencyStopCtrl emergencyStopCtrl;
+    [SerializeField] private LogicalCtrl _logicalCtrl;
+    [SerializeField] private EmergencyStopCtrl _emergencyStopCtrl;
 
     [Header("--- Misc --- ")]
-    public bool isOn = false;
+    [SerializeField] private bool _isOn = false;
 
     void Awake()
     {
@@ -29,11 +29,11 @@ public class LigDesligCtrl : MonoBehaviour
         if(_gameState == GameState.PowerConnection)
         {
             //Check is the previous logic point is active first
-            if (_chaveGeralCtrl.isOn && emergencyStopCtrl.isPressed == false)
+            if (_logicalCtrl.GetTrioStatus() && _emergencyStopCtrl.GetEmergencyStatus() == false)
             {
                 if (_inputCtrl.click && _inputCtrl.currentObject == this.gameObject)
                 {
-                    if (isOn == false)
+                    if (_isOn == false)
                         StartCoroutine(Press(8.6e-05f));
                     else
                         StartCoroutine(Press(8.6e-05f));
@@ -41,7 +41,7 @@ public class LigDesligCtrl : MonoBehaviour
             }
             else
             {
-                isOn = false;
+                _isOn = false;
             }
         }
     }
@@ -57,10 +57,10 @@ public class LigDesligCtrl : MonoBehaviour
             yield return null;
         }
 
-        if (isOn == false)
-            isOn = true;
+        if (_isOn == false)
+            _isOn = true;
         else
-            isOn = false;
+            _isOn = false;
 
         StartCoroutine(Release(trans));
     }
@@ -75,5 +75,8 @@ public class LigDesligCtrl : MonoBehaviour
         this.gameObject.GetComponent<CapsuleCollider>().enabled = true;
     }
 
-
+    public bool IsOn()
+    {
+        return _isOn;
+    }
 }

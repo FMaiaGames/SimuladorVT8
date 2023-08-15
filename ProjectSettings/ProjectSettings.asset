@@ -135,7 +135,11 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleVersion: 1.0.2
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: 11400000, guid: 0a0247ab204afef489b7d5d46d505394, type: 2}
+  - {fileID: 4432789975766798883, guid: 77eea532c95d1fc4087ee2249938e8d0, type: 2}
+  - {fileID: 11400000, guid: 669769ac095066d44901ad808f9d8584, type: 2}
+  - {fileID: 387350150029681163, guid: 73dca024e00ccbb4292d161786fe3eb3, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -157,6 +161,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.VT8.Simulador
     Standalone: com.VT8.Simulador
+    iPhone: com.VT8.Simulador
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -470,7 +475,7 @@ PlayerSettings:
     m_DynamicBatching: 0
   - m_BuildTarget: Android
     m_StaticBatching: 1
-    m_DynamicBatching: 0
+    m_DynamicBatching: 1
   - m_BuildTarget: iPhone
     m_StaticBatching: 1
     m_DynamicBatching: 0
@@ -815,7 +820,7 @@ PlayerSettings:
   allowUnsafeCode: 0
   useDeterministicCompilation: 1
   enableRoslynAnalyzers: 1
-  selectedPlatform: 2
+  selectedPlatform: 3
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
   gcIncremental: 1
