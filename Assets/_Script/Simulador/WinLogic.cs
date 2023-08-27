@@ -18,6 +18,7 @@ public class WinLogic : MonoBehaviour
     [Header("--- UI --- ")]
     [SerializeField] private GameObject _winingDisplay;
     [SerializeField] private GameObject _losingDisplay;
+    [SerializeField] private GameObject _clpPanel;
 
     [Header("--- Devices --- ")]
     [SerializeField] private LigDesligCtrl _ligDesligCtrl;
@@ -211,5 +212,10 @@ public class WinLogic : MonoBehaviour
             chave.TurnOff();
     }
 
+    public void AutoLose()
+    {
+        _clpPanel.SetActive(false);
+        LoseDisplay();
+    }
 
 }

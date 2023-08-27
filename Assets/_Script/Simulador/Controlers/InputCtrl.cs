@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputCtrl : MonoBehaviour
 {
@@ -142,35 +140,55 @@ public class InputCtrl : MonoBehaviour
             currentPos = Input.mousePosition;
         }
 
-        ray = cam.ScreenPointToRay(currentPos);
-
-        allHits = Physics.RaycastAll(ray, 10000.0F);
-
-        if (allHits != null && allHits.Length != 0)
+ 
+        if (IsMouseOverUI() == false)
         {
-            for (int i = 0; i < allHits.Length; i++)
+
+            ray = cam.ScreenPointToRay(currentPos);
+
+            allHits = Physics.RaycastAll(ray, 10000.0F);
+
+            if (allHits != null && allHits.Length != 0)
             {
-                if (allHits[i].collider.gameObject.CompareTag("Wire"))
+                for (int i = 0; i < allHits.Length; i++)
                 {
-                    wireHit = true;
-                }
-                else
-                {
-                    currentObject = allHits[i].collider.gameObject;
+                    if (allHits[i].collider.gameObject.CompareTag("Wire"))
+                    {
+                        wireHit = true;
+                    }
+                    else
+                    {
+                        currentObject = allHits[i].collider.gameObject;
+                    }
                 }
             }
+
         }
-
-
-        //print("CurrentPos: " + currentPos);
-
-        /*
-        if(currentObject != null) 
-            print("Current OBJ: " + currentObject.name);
-        */
 
     }
 
+    private bool IsMouseOverUI()
+    {
+        if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                if (EventSystem.current.IsPointerOverGameObject(i))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        else
+        {
+            if (EventSystem.current != null)
+                return EventSystem.current.IsPointerOverGameObject();
+            else
+                return false;
+        }
 
+
+    }
 
 }

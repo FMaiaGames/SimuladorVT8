@@ -1,16 +1,45 @@
-using System;
 using System.Collections;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using static QRManager;
+
 
 public class MainMenu : MonoBehaviour
 {
+    private SceneController _sceneController;
+    [SerializeField] private GameObject[] _windows;
 
-    [SerializeField] private GameObject[] _Windows;
+    private void Start()
+    {
+        _sceneController = SceneController.Instance;
+
+        QrResult qrResult = SceneController.qrResult;
+
+        switch (qrResult)
+        {
+            case QrResult.Disjuntor:
+                SceneController.qrResult = QrResult.None;
+                OpenWindow(_windows[1]);
+                break;
+            case QrResult.Driver:
+                SceneController.qrResult = QrResult.None;
+                OpenWindow(_windows[3]);
+                break;
+            case QrResult.Encoder:
+                SceneController.qrResult = QrResult.None;
+                OpenWindow(_windows[5]);
+                break;
+            case QrResult.Servo:
+                SceneController.qrResult = QrResult.None;
+                OpenWindow(_windows[7]);
+                break;
+            case QrResult.Fonte:
+                SceneController.qrResult = QrResult.None;
+                OpenWindow(_windows[9]);
+                break;
+        }
+
+    }
 
     public void OpenWindow(GameObject newWindow)
     {

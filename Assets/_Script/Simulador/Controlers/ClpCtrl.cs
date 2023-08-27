@@ -1,10 +1,6 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using static ParameterObj;
 using static SimulationManager;
 
 public class ClpCtrl : MonoBehaviour
@@ -126,17 +122,28 @@ public class ClpCtrl : MonoBehaviour
             // Fetch parameter
             _paramValue = _parameterObj.SearchParamValue(_paramKey);
 
-            //Display assign each 
-            for (int i = 3; i >= 0; i--)
+            if( _paramValue == null)
             {
-                _charValue[i] = _paramValue[i];
-                _displayChar[i].text = _paramValue[i].ToString();
+                _displayChar[0].text = "E";
+                _displayChar[1].text = "R";
+                _displayChar[2].text = "R";
+                _displayChar[3].text = "O";
+
             }
+            else
+            {
+                //Display assign each 
+                for (int i = 3; i >= 0; i--)
+                {
+                    _charValue[i] = _paramValue[i];
+                    _displayChar[i].text = _paramValue[i].ToString();
+                }
+            }
+
 
         }
         else
         {
-
             //Prepare the display
             _isParOpen = false;
             _displayP.text = "P";

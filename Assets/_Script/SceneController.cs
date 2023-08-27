@@ -1,12 +1,18 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static QRManager;
+
 
 public class SceneController : MonoBehaviour
 {
     public static SceneController Instance;
+    public static string openWindow;
+
+    [Header("--- Static Variables ---")]
+    public static QrResult qrResult;
+    public static VideoType videoType;
+
+    public enum VideoType { Servoacionamento, Aplicação, Robo, Tutorial};
 
     public void Awake(){ Instance = this; }
 
@@ -20,6 +26,8 @@ public class SceneController : MonoBehaviour
 
     public void MainMenu(){SceneManager.LoadScene("MainMenu");}
 
+    public void MainMenu(QrResult qrr) {SceneManager.LoadScene("MainMenu"); qrResult = qrr; }
+
     public void PDF(){SceneManager.LoadScene("PDF");}
 
     public void Video(){SceneManager.LoadScene("Video");}
@@ -28,5 +36,30 @@ public class SceneController : MonoBehaviour
 
     public void Simulation(){SceneManager.LoadScene("Simulador");}
 
-    public void OnCollisionExit(Collision collision){Application.Quit();}
+    // -- VÍDEOS -- 
+
+    public void VideoServoacionamento()
+    {
+        videoType = VideoType.Servoacionamento;
+        SceneManager.LoadScene("Video");
+    }
+
+    public void VideoAplicação()
+    {
+        videoType = VideoType.Aplicação;
+        SceneManager.LoadScene("Video");
+    }
+
+    public void VideoRobo()
+    {
+        videoType = VideoType.Robo;
+        SceneManager.LoadScene("Video");
+    }
+
+    public void VideoTutorial()
+    {
+        videoType = VideoType.Tutorial;
+        SceneManager.LoadScene("Video");
+    }
+
 }

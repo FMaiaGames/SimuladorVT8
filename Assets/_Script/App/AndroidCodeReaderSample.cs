@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using ZXing;
-using UnityEngine.SceneManagement;
 using TMPro;
 
 public class AndroidCodeReaderSample : MonoBehaviour {
@@ -89,7 +88,7 @@ public class AndroidCodeReaderSample : MonoBehaviour {
 
         // Do something with the result
         if (result != null) {
-            lastResult = result.Text + " " + result.BarcodeFormat;
+            lastResult = result.Text;
             print(lastResult);
         }
     }
