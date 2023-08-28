@@ -31,7 +31,6 @@ public class ChaveCtrl : MonoBehaviour
         _lever.transform.GetPositionAndRotation(out originalPos, out originalRot);
     }
 
-    // Update is called once per frame
     private void Update()
     {
         if (_gameState == GameState.ParameterPhase)

@@ -17,22 +17,31 @@ public class MainMenu : MonoBehaviour
 
         switch (qrResult)
         {
+            case QrResult.Aplication:
+                SceneController.qrResult = QrResult.None;
+                OpenWindow(_windows[11]);
+                break;
+
             case QrResult.Disjuntor:
                 SceneController.qrResult = QrResult.None;
                 OpenWindow(_windows[1]);
                 break;
+
             case QrResult.Driver:
                 SceneController.qrResult = QrResult.None;
                 OpenWindow(_windows[3]);
                 break;
+
             case QrResult.Encoder:
                 SceneController.qrResult = QrResult.None;
                 OpenWindow(_windows[5]);
                 break;
+
             case QrResult.Servo:
                 SceneController.qrResult = QrResult.None;
                 OpenWindow(_windows[7]);
                 break;
+
             case QrResult.Fonte:
                 SceneController.qrResult = QrResult.None;
                 OpenWindow(_windows[9]);

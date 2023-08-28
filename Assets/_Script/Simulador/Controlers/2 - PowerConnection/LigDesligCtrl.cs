@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using static SimulationManager;
 
@@ -11,13 +12,27 @@ public class LigDesligCtrl : MonoBehaviour
     [SerializeField] private LogicalCtrl _logicalCtrl;
     [SerializeField] private EmergencyStopCtrl _emergencyStopCtrl;
 
-    [Header("--- Misc --- ")]
+    [Header("--- Position & Rotation--- ")]
+    [SerializeField] private GameObject _lever;
+
+    //Original off position
+    [SerializeField] private Vector3 originalPos;
+    [SerializeField] private Quaternion originalRot;
+
+    //New On position
+    [SerializeField] private Vector3 newPos;
+    [SerializeField] private Quaternion newRot;
+
+    [Header("--- Misc --- ")] 
     [SerializeField] private bool _isOn = false;
 
     void Awake()
     {
         _inputCtrl = InputCtrl.Instance;
         SimulationManager.OnStateChanged += OnStateChanged;
+
+        _lever = this.gameObject;
+        _lever.transform.GetPositionAndRotation(out originalPos, out originalRot);
     }
     // Game State subscription 
     private GameState _gameState;

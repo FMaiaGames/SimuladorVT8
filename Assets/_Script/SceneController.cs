@@ -34,7 +34,7 @@ public class SceneController : MonoBehaviour
 
     public void QR(){SceneManager.LoadScene("QR");}
 
-    public void Simulation(){SceneManager.LoadScene("Simulador");}
+    public void Simulation(){SceneManager.LoadScene("Simulation");}
 
     // -- VÍDEOS -- 
 

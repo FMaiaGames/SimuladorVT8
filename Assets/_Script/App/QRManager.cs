@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class QRManager : MonoBehaviour
 {
-    public enum QrResult { None, Simulador, Disjuntor, Driver, Encoder, Servo, Fonte };
+    public enum QrResult { None, Aplication, Simulation, Disjuntor, Driver, Encoder, Servo, Fonte };
 
     [SerializeField] private AndroidCodeReaderSample _androidCodeReaderSample;
     [SerializeField] private SceneController _sceneController;
@@ -25,8 +25,8 @@ public class QRManager : MonoBehaviour
             if (string.Compare("VT8/2023005/APLICACAO", _androidCodeReaderSample.lastResult) == 0)
             {
                 _popUp.SetActive(true);
-                _componente.text = "Simulador";
-                _qrResult = QrResult.Simulador;
+                _componente.text = "Aplicação";
+                _qrResult = QrResult.Aplication;
             }
 
             if (string.Compare("VT8/2023005/DISJUNTOR", _androidCodeReaderSample.lastResult) == 0)
@@ -64,6 +64,14 @@ public class QRManager : MonoBehaviour
                 _qrResult = QrResult.Fonte;
             }
 
+
+            if (string.Compare("VT8/2023005/SIMULADOR", _androidCodeReaderSample.lastResult) == 0)
+            {
+                _popUp.SetActive(true);
+                _componente.text = "Simulador";
+                _qrResult = QrResult.Simulation;
+            }
+
         }
     }
 
@@ -71,25 +79,34 @@ public class QRManager : MonoBehaviour
     {
         switch (_qrResult)
         {
-            case QrResult.Simulador:
-                _sceneController.Simulation();
+            case QrResult.Aplication:
+                _sceneController.MainMenu(QrResult.Aplication);
                 break;
+
             case QrResult.Disjuntor:
                 _sceneController.MainMenu(QrResult.Disjuntor);
                 break;
+
             case QrResult.Driver:
                 _sceneController.MainMenu(QrResult.Driver);
                 break;
+
             case QrResult.Encoder:
                 _sceneController.MainMenu(QrResult.Encoder);
                 break;
+
             case QrResult.Servo:
                 _sceneController.MainMenu(QrResult.Servo);
                 break;
+
             case QrResult.Fonte:
                 _sceneController.MainMenu(QrResult.Fonte);
                 break;
-        }
+
+             case QrResult.Simulation:
+                _sceneController.Simulation();
+                break;
+    }
     }
 
     public void LoadQRCode2()
