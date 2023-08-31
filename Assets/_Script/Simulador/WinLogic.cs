@@ -29,7 +29,7 @@ public class WinLogic : MonoBehaviour
 
     [Header("--- WinLogic --- ")]
     [SerializeField] private GameObject _motor;
-    [SerializeField] private GameObject _disco;
+    [SerializeField] private GameObject _disk;
     [SerializeField] private GameObject _mainCanvas;
     [SerializeField] private GameObject _congratulationsCanvas;
 
@@ -177,7 +177,7 @@ public class WinLogic : MonoBehaviour
 
         while (Time.timeSinceLevelLoad <= timer)
         {
-            _disco.transform.Rotate(Vector3.forward * 600f * Time.deltaTime);
+            _disk.transform.Rotate(Vector3.forward * 600f * Time.deltaTime);
 
             yield return null;
         }
@@ -194,16 +194,13 @@ public class WinLogic : MonoBehaviour
         if (_chaves[0].IsOn() == true)
             checkCorrect = true;
 
-
         for (int i = 1; i < _chaves.Count; i++)
         {
             if (_chaves[i].IsOn() == true)
                 checkCorrect = false;
         }
 
-
         return checkCorrect;
-
     }
 
     private void ResetChaves()

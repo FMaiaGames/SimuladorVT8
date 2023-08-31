@@ -8,13 +8,15 @@ public class DRCtrl : MonoBehaviour
     [SerializeField] private GameObject _lever;
     [SerializeField] private bool isOn = false;
 
+    [Header("--- Position & Rotation--- ")]
+
     //Original off position
-    private Vector3 originalPos;
-    private Quaternion originalRot;
+    [SerializeField] private Vector3 originalPos;
+    [SerializeField] private Quaternion originalRot;
 
     //New On position
-    private Vector3 newPos;
-    private Quaternion newRot;
+    [SerializeField] private Vector3 newPos;
+    [SerializeField] private Quaternion newRot;
 
     // Game State subscription 
     private GameState _gameState;
@@ -30,8 +32,10 @@ public class DRCtrl : MonoBehaviour
         _lever.transform.GetPositionAndRotation(out originalPos, out originalRot);
 
         //Set the new position on rotation of the on position 
-        newPos = new Vector3(0.000495f, -0.000166f, 1.4e-05f); 
-        newRot = Quaternion.Euler(new Vector3(0f, 0f, -180f) ); 
+        //newPos = new Vector3(0.000495f, -0.000166f, 1.4e-05f); 
+        //newRot = Quaternion.Euler(new Vector3(0f, 0f, -180f) ); 
+
+
     }
 
     private void Update()

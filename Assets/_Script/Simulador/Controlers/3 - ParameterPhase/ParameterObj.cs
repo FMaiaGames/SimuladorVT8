@@ -31,28 +31,6 @@ public class ParameterObj : MonoBehaviour
     private void Start()
     {
         parameterList = new List<Parameter>();
-        /* 
-        // --- LIBERA ACESSO
-        parameterList.Add(new Parameter("0000", 0, 0, 0, 0));
-        parameterList.Add(new Parameter("0204", 0, 0, 0, 0));
-
-        // --- MODO POSICIONADOR
-        parameterList.Add(new Parameter("0385", 0, 0, 0, 0));
-        parameterList.Add(new Parameter("0202", 0, 0, 0, 0));
-        parameterList.Add(new Parameter("1070", 0, 0, 0, 0));
-        parameterList.Add(new Parameter("1081", 0, 0, 0, 0));
-        parameterList.Add(new Parameter("1101", 0, 0, 0, 0));
-        parameterList.Add(new Parameter("1102", 0, 0, 0, 0));
-
-        parameterList.Add(new Parameter("1151", 0, 0, 0, 0));
-        parameterList.Add(new Parameter("0099", 0, 0, 0, 0));
-
-        parameterList.Add(new Parameter("1171", 0, 0, 0, 0));
-        parameterList.Add(new Parameter("1181", 0, 0, 0, 0));
-        parameterList.Add(new Parameter("1191", 0, 0, 0, 0));
-        parameterList.Add(new Parameter("1201", 0, 0, 0, 0));
-        parameterList.Add(new Parameter("1202", 0, 0, 0, 0));
-        */
 
         paramKeys = new List<string>();
 
@@ -78,31 +56,7 @@ public class ParameterObj : MonoBehaviour
         paramKeys.Add("1202");
 
         paramKeys.Add("0099");
-    /*
-    INICIO:
-    P0000 = 5(LIBERA ACESSO)
-    P0204 = 13(RESET DOS PARAMETROS EXISTENTES)
-
-    MODO POSICIONADOR
-    P0385 = 22(MODELO DO MOTOR)
-    P0202 = 3 MODO POSICIONADOR
-    P1070 = 0 POSICIONADOR PELAS ENTRADAS DI1 a DI3
-    P1081 = 1 ENTRADA DIGITAL 1 = CICLO 1
-    P1101 = 1 MOVIMENTO 1 NO CICLO 1
-    P1102 = 0 FIM DO CICLO
-
-    MOVIMENTO 1
-    P1151 = 3 MOVIMENTO RELATIVO
-    P1161 = 0 DELAY ANTES DO MOVIMENTO(ms)
-    P1171 = 8192 FRACOES DE VOLTAS(MEIA VOLTA)
-    P1181 = 3 NUMERO DE VOLTAS
-    P1191 = 100 VELOCIDADE DE POSICIONAMENTO(RPM)
-    P1201 = 5000 ACELERA”CÃO DE POSCIONAMENTO(RPM / s)
-    P1202 = 5000 DSACELERAÇÃO DE POSICIONAMENTO(RPM / s)
-
-    P99 = 1 HABILITA SERVO
-    */
-
+ 
     }
 
     public int[] SearchParamValue(string key)
@@ -114,12 +68,6 @@ public class ParameterObj : MonoBehaviour
             if(string.Equals(key, parameterList[i].key))
                 return parameterList[i].value;
         }
-        /*
-        //If there is no parameter, create one with the value 0000
-        int[] tmpParam = new int[4];
-        for (int j = 0; j < tmpParam.Length; j++)
-            tmpParam[j] = 0;
-        */
 
         //If there is no parameter...
         return null;
@@ -160,9 +108,7 @@ public class ParameterObj : MonoBehaviour
         //If there were no keys found, add one
         parameterList.Add(new Parameter(key, value[0], value[1], value[2], value[3]));
 
-
         return false;
-
 
     }
 
@@ -185,7 +131,6 @@ public class ParameterObj : MonoBehaviour
         rightParam.Add(new Parameter("1102", 0, 0, 0, 0) );
 
         rightParam.Add(new Parameter("1151", 0, 0, 0, 3) );
-       // rightParam.Add(new Parameter("1161", 0, 0, 0, 0) );
         rightParam.Add(new Parameter("0099", 0, 0, 0, 1) );
 
         int[] compareValue = new int[4];
@@ -198,7 +143,6 @@ public class ParameterObj : MonoBehaviour
             // If null, the student failed
             if (compareValue == null)
                 return false;
-
 
             //If true, compare the right value to the current value
             for (int j = 0; j < compareValue.Length; j++)
@@ -227,10 +171,7 @@ public class ParameterObj : MonoBehaviour
             winCount++;
 
         if (SearchParamValue("1161") != null)
-        {
             winCount++;
-            print("1161 existe porra");
-        }
 
         print($"Winning number: {winCount}");
 
@@ -288,7 +229,6 @@ public class ParameterObj : MonoBehaviour
 
         parameterList.Add(new Parameter("0099", 0, 0, 0, 1));
     }
-
     public void DeleteParameters(){ parameterList?.Clear(); }  //Clean parameters list
 
     void PrintParam(string key, int v0, int v1, int v2, int v3){ print($"{key}, {v0}{v1}{v2}{v3}"); } //Print parameters for debug purposes

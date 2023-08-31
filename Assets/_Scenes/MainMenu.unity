@@ -3028,9 +3028,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQRScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: QR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6365,9 +6365,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQRScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: QR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7024,9 +7024,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQRScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: QR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8282,9 +8282,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQRScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: QR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10459,9 +10459,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQRScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: QR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11425,9 +11425,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQRScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: QR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12428,9 +12428,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQRScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: QR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14024,9 +14024,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQRScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: QR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16414,9 +16414,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQRScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: QR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18609,9 +18609,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQRScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: QR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -21218,9 +21218,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 126322377}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OpenQRScene
+      - m_Target: {fileID: 126322379}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: QR
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
